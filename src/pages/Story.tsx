@@ -1,7 +1,34 @@
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import TimelineCard from "../components/TimelineCard";
+import { db } from "../firebase";
+import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
+
+type TimelineEvent = {
+  id: string;
+  title: string;
+  date: string;
+  description: string;
+};
 
 export default function Story() {
+  const [events, setEvents] = useState<TimelineEvent[]>([]);
+
+  useEffect(() => {
+    const q = query(collection(db, "timeline"), orderBy("createdAt", "desc"));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        ...(doc.data() as Omit<TimelineEvent, "id">),
+      }));
+
+      setEvents(data);
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   return (
     <motion.main
       initial={{ opacity: 0, y: 40 }}
@@ -13,52 +40,29 @@ export default function Story() {
         padding: "20px",
       }}
     >
-      <h1
-        style={{
-          color: "white",
-          fontSize: "56px",
-          textAlign: "center",
-          marginBottom: "20px",
-        }}
-      >
+      <h1 style={{ color: "white", fontSize: "56px", textAlign: "center" }}>
         ❤️ Our Story
       </h1>
 
-      <p
-        style={{
-          color: "#e5e7eb",
-          textAlign: "center",
-          fontSize: "21px",
-          marginBottom: "60px",
-        }}
-      >
+      <p style={{ color: "#e5e7eb", textAlign: "center", fontSize: "21px", marginBottom: "60px" }}>
         Two hearts, one journey, and a tiny miracle on the way.
       </p>
 
-      <TimelineCard
-        emoji="💍"
-        title="Our Wedding Day"
-        date="March 6, 2025"
-        description="The day our forever began, surrounded by love, family, blessings, and beautiful memories."
-      />
-
-      <TimelineCard
-        emoji="🤰"
-        title="A Tiny Miracle"
-        description="A new life entered our world and changed everything with one beautiful heartbeat."
-      />
-
-      <TimelineCard
-        emoji="✈️"
-        title="Honey Arrived in America"
-        description="Together in the USA, we started a new chapter as parents-to-be."
-      />
-
-      <TimelineCard
-        emoji="👶"
-        title="Waiting for Baby Evvala"
-        description="Every kick, every heartbeat, and every small moment reminds us that our family is growing."
-      />
+      {events.length === 0 ? (
+        <p style={{ color: "white", textAlign: "center" }}>
+          No timeline events added yet.
+        </p>
+      ) : (
+        events.map((event) => (
+          <TimelineCard
+            key={event.id}
+            emoji="✨"
+            title={event.title}
+            date={event.date}
+            description={event.description}
+          />
+        ))
+      )}
     </motion.main>
   );
 }

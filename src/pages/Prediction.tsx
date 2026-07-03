@@ -1,6 +1,9 @@
 import { useState } from "react";
 import "../App.css";
 
+import { db } from "../firebase";
+import { collection, addDoc } from "firebase/firestore";
+
 export default function Prediction() {
   const [gender, setGender] = useState("");
   const [name, setName] = useState("");
@@ -11,20 +14,36 @@ export default function Prediction() {
   const [message, setMessage] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = () => {
-    const prediction = {
-      gender,
-      name,
-      relationship,
-      city,
-      birthDate,
-      babyName,
-      message,
-    };
+  const handleSubmit = async () => {
+    if (!name || !gender) {
+      alert("Please fill your name and prediction.");
+      return;
+    }
 
-    console.log(prediction);
+    try {
+      await addDoc(collection(db, "predictions"), {
+        gender,
+        name,
+        relationship,
+        city,
+        birthDate,
+        babyName,
+        message,
+        submittedAt: new Date(),
+      });
 
-    setSubmitted(true);
+      setSubmitted(true);
+      setGender("");
+      setName("");
+      setRelationship("");
+      setCity("");
+      setBirthDate("");
+      setBabyName("");
+      setMessage("");
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong.");
+    }
   };
 
   return (
@@ -101,11 +120,7 @@ export default function Prediction() {
           onChange={(e) => setMessage(e.target.value)}
         />
 
-        <button
-          type="button"
-          className="submit-btn"
-          onClick={handleSubmit}
-        >
+        <button type="button" className="submit-btn" onClick={handleSubmit}>
           Submit Prediction ❤️
         </button>
       </div>
