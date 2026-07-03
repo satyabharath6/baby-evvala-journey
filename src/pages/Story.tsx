@@ -30,60 +30,33 @@ export default function Story() {
   }, []);
 
   return (
-    <motion.main
-      initial={{ opacity: 0, y: 40 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.7 }}
-      style={{
-        maxWidth: 900,
-        margin: "120px auto 80px",
-        padding: 20,
-        color: "white",
-      }}
-    >
-      <h1 style={{ fontSize: "3.5rem", textAlign: "center" }}>
-        ❤️ Our Story
-      </h1>
+    <main className="page story-v2">
+      <div className="prediction-header">
+        <h1>❤️ Our Story</h1>
+        <p>Every milestone becomes part of Baby Evvala&apos;s journey.</p>
+      </div>
 
-      <p
-        style={{
-          color: "#ddd",
-          textAlign: "center",
-          marginBottom: 50,
-          fontSize: "1.2rem",
-        }}
-      >
-        Every milestone becomes part of Baby Evvala's journey.
-      </p>
+      <div className="story-timeline">
+        {events.length === 0 ? (
+          <p className="empty-text">No story events added yet.</p>
+        ) : (
+          events.map((event) => (
+            <motion.article
+              key={event.id}
+              whileHover={{ scale: 1.02 }}
+              className="story-card"
+            >
+              <div className="story-emoji">{event.emoji}</div>
 
-      {events.length === 0 ? (
-        <p style={{ textAlign: "center", color: "#ccc" }}>
-          No story events added yet.
-        </p>
-      ) : (
-        events.map((event) => (
-          <motion.div
-            key={event.id}
-            whileHover={{ scale: 1.02 }}
-            style={{
-              background: "rgba(255,255,255,.08)",
-              border: "1px solid rgba(255,255,255,.15)",
-              borderRadius: 24,
-              padding: 30,
-              marginBottom: 25,
-              boxShadow: "0 10px 30px rgba(0,0,0,.25)",
-            }}
-          >
-            <h2>
-              {event.emoji} {event.title}
-            </h2>
-
-            <p style={{ color: "#ccc" }}>{event.date}</p>
-
-            <p style={{ lineHeight: 1.8 }}>{event.description}</p>
-          </motion.div>
-        ))
-      )}
-    </motion.main>
+              <div>
+                <h2>{event.title}</h2>
+                <p className="story-date">{event.date}</p>
+                <p className="story-description">{event.description}</p>
+              </div>
+            </motion.article>
+          ))
+        )}
+      </div>
+    </main>
   );
 }

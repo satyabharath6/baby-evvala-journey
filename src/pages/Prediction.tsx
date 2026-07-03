@@ -1,6 +1,5 @@
 import { useState } from "react";
 import "../App.css";
-
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
 
@@ -47,62 +46,76 @@ export default function Prediction() {
   };
 
   return (
-    <section className="prediction-page">
-      <h1 className="page-title">🔮 Baby Prediction</h1>
-      <p className="page-subtitle">What does your heart say?</p>
+    <main className="page prediction-v2">
+      <div className="prediction-header">
+        <h1>🔮 Baby Prediction</h1>
+        <p>What does your heart say?</p>
+      </div>
 
-      <div className="prediction-card">
+      <div className="prediction-card glass-card">
         <h2>👶 Make Your Prediction</h2>
 
         <label>Boy or Girl?</label>
-        <div className="gender-buttons">
+        <div className="gender-buttons-v2">
           <button
             type="button"
-            className={gender === "Boy" ? "selected" : ""}
+            className={gender === "Boy" ? "gender-choice selected" : "gender-choice"}
             onClick={() => setGender("Boy")}
           >
-            👦 Boy
+            <span>👦</span>
+            Boy
           </button>
 
           <button
             type="button"
-            className={gender === "Girl" ? "selected" : ""}
+            className={gender === "Girl" ? "gender-choice selected" : "gender-choice"}
             onClick={() => setGender("Girl")}
           >
-            👧 Girl
+            <span>👧</span>
+            Girl
           </button>
         </div>
 
-        <label>Your Name</label>
-        <input
-          type="text"
-          placeholder="Your name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <div className="form-grid">
+          <div>
+            <label>Your Name</label>
+            <input
+              type="text"
+              placeholder="Your name"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+            />
+          </div>
 
-        <label>Relationship</label>
-        <input
-          type="text"
-          placeholder="Uncle, Aunt, Friend..."
-          value={relationship}
-          onChange={(e) => setRelationship(e.target.value)}
-        />
+          <div>
+            <label>Relationship</label>
+            <input
+              type="text"
+              placeholder="Uncle, Aunt, Friend..."
+              value={relationship}
+              onChange={(e) => setRelationship(e.target.value)}
+            />
+          </div>
 
-        <label>Village / City</label>
-        <input
-          type="text"
-          placeholder="Village or City"
-          value={city}
-          onChange={(e) => setCity(e.target.value)}
-        />
+          <div>
+            <label>Village / City</label>
+            <input
+              type="text"
+              placeholder="Village or City"
+              value={city}
+              onChange={(e) => setCity(e.target.value)}
+            />
+          </div>
 
-        <label>Expected Birth Date</label>
-        <input
-          type="date"
-          value={birthDate}
-          onChange={(e) => setBirthDate(e.target.value)}
-        />
+          <div>
+            <label>Expected Birth Date</label>
+            <input
+              type="date"
+              value={birthDate}
+              onChange={(e) => setBirthDate(e.target.value)}
+            />
+          </div>
+        </div>
 
         <label>Name Suggestion</label>
         <input
@@ -120,7 +133,7 @@ export default function Prediction() {
           onChange={(e) => setMessage(e.target.value)}
         />
 
-        <button type="button" className="submit-btn" onClick={handleSubmit}>
+        <button type="button" className="primary-btn" onClick={handleSubmit}>
           Submit Prediction ❤️
         </button>
       </div>
@@ -129,16 +142,15 @@ export default function Prediction() {
         <div className="success-box">
           <h2>🎉 Thank You!</h2>
           <p>Your prediction has been saved for Baby Evvala ❤️</p>
-
           <button
             type="button"
-            className="submit-btn"
+            className="primary-btn"
             onClick={() => setSubmitted(false)}
           >
             Close
           </button>
         </div>
       )}
-    </section>
+    </main>
   );
 }

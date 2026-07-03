@@ -22,9 +22,7 @@ export default function Reveal() {
   useEffect(() => {
     async function loadReveal() {
       const snap = await getDoc(doc(db, "settings", "reveal"));
-      if (snap.exists()) {
-        setSettings(snap.data() as RevealSettings);
-      }
+      if (snap.exists()) setSettings(snap.data() as RevealSettings);
     }
 
     loadReveal();
@@ -70,17 +68,21 @@ export default function Reveal() {
 
   if (!settings) {
     return (
-      <h2 style={{ color: "white", textAlign: "center", marginTop: 120 }}>
-        Loading...
-      </h2>
+      <main className="page reveal-page">
+        <h2>Loading...</h2>
+      </main>
     );
   }
 
   if (!settings.enabled) {
     return (
-      <h2 style={{ color: "white", textAlign: "center", marginTop: 120 }}>
-        Reveal Coming Soon ❤️
-      </h2>
+      <main className="page reveal-page">
+        <div className="reveal-card">
+          <div className="reveal-icon">🎁</div>
+          <h1>Reveal Coming Soon</h1>
+          <p>Baby Evvala&apos;s special moment is almost here ❤️</p>
+        </div>
+      </main>
     );
   }
 
@@ -92,26 +94,20 @@ export default function Reveal() {
       renderer={({ completed, days, hours, minutes, seconds }) => {
         if (!completed) {
           return (
-            <main style={{ color: "white", textAlign: "center", marginTop: 120 }}>
-              <h1 style={{ fontSize: "4.5rem" }}>🎉 Gender Reveal</h1>
+            <main className="page reveal-page">
+              <div className="reveal-card">
+                <div className="reveal-icon">🎉</div>
 
-              <p style={{ fontSize: "1.5rem", color: "#ddd" }}>
-                Countdown to Baby Evvala&apos;s Big Reveal
-              </p>
+                <h1>Gender Reveal</h1>
 
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 30,
-                  marginTop: 60,
-                  flexWrap: "wrap",
-                }}
-              >
-                <TimeCard value={days} label="Days" />
-                <TimeCard value={hours} label="Hours" />
-                <TimeCard value={minutes} label="Minutes" />
-                <TimeCard value={seconds} label="Seconds" />
+                <p>Countdown to Baby Evvala&apos;s big reveal</p>
+
+                <div className="countdown-grid">
+                  <TimeCard value={days} label="Days" />
+                  <TimeCard value={hours} label="Hours" />
+                  <TimeCard value={minutes} label="Minutes" />
+                  <TimeCard value={seconds} label="Seconds" />
+                </div>
               </div>
             </main>
           );
@@ -128,24 +124,30 @@ export default function Reveal() {
               numberOfPieces={400}
             />
 
-            <main style={{ color: "white", textAlign: "center", marginTop: 120 }}>
-              <div style={{ fontSize: "7rem", animation: "pulse 1.5s infinite" }}>
-                {settings.gender === "boy" ? "💙" : "💖"}
-              </div>
-
-              <h1
-                style={{
-                  fontSize: "5.5rem",
-                  animation: "pulse 1.5s infinite",
-                  textShadow: "0 0 25px rgba(255,255,255,.8)",
-                }}
+            <main className="page reveal-page">
+              <div
+                className={
+                  settings.gender === "boy"
+                    ? "reveal-card final-reveal boy-reveal"
+                    : "reveal-card final-reveal girl-reveal"
+                }
               >
-                {settings.gender === "boy" ? "IT'S A BOY!" : "IT'S A GIRL!"}
-              </h1>
+                <div className="final-heart">
+                  {settings.gender === "boy" ? "💙" : "💖"}
+                </div>
 
-              <h2 style={{ marginTop: 30, fontSize: "2rem" }}>
-                Welcome Baby Evvala ❤️
-              </h2>
+                <h1>
+                  {settings.gender === "boy"
+                    ? "IT'S A BOY!"
+                    : "IT'S A GIRL!"}
+                </h1>
+
+                <p>Welcome Baby Evvala ❤️</p>
+
+                <p className="reveal-thanks">
+                  Thank you for celebrating this beautiful journey with us.
+                </p>
+              </div>
             </main>
           </>
         );
@@ -156,19 +158,9 @@ export default function Reveal() {
 
 function TimeCard({ value, label }: { value: number; label: string }) {
   return (
-    <div
-      style={{
-        width: 150,
-        padding: 25,
-        borderRadius: 25,
-        background: "rgba(255,255,255,.08)",
-        border: "1px solid rgba(255,255,255,.15)",
-      }}
-    >
-      <div style={{ fontSize: "3rem", fontWeight: "bold" }}>{value}</div>
-      <div style={{ marginTop: 10, color: "#ccc", fontSize: "1.2rem" }}>
-        {label}
-      </div>
+    <div className="time-card">
+      <div>{value}</div>
+      <span>{label}</span>
     </div>
   );
 }
