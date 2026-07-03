@@ -1,70 +1,80 @@
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { useState } from "react";
+import { Menu, X, Home, Heart, Sparkles, Images, PartyPopper } from "lucide-react";
 
 export default function Navbar() {
+  const [open, setOpen] = useState(false);
+  const location = useLocation();
+
+  const links = [
+    { name: "Home", path: "/", icon: <Home size={20} /> },
+    { name: "Story", path: "/story", icon: <Heart size={20} /> },
+    { name: "Prediction", path: "/prediction", icon: <Sparkles size={20} /> },
+    { name: "Blessings", path: "/blessings", icon: <Heart size={20} /> },
+    { name: "Gallery", path: "/gallery", icon: <Images size={20} /> },
+    { name: "Reveal", path: "/reveal", icon: <PartyPopper size={20} /> },
+  ];
+
   return (
-    <nav
-      style={{
-        position: "fixed",
-        top: 20,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: "92%",
-        maxWidth: "1100px",
-        padding: "15px 28px",
-        borderRadius: "999px",
-        background: "rgba(255,255,255,0.12)",
-        backdropFilter: "blur(14px)",
-        border: "1px solid rgba(255,255,255,0.15)",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        zIndex: 100,
-      }}
-    >
-      <Link
-        to="/"
-        style={{
-          color: "white",
-          textDecoration: "none",
-          fontWeight: "bold",
-          fontSize: 20,
-        }}
-      >
-        👶 Baby Evvala
-      </Link>
-
-      <div
-        style={{
-          display: "flex",
-          gap: "22px",
-        }}
-      >
-        <Link to="/story" style={linkStyle}>
-          Story
+    <>
+      <nav className="navbar">
+        <Link to="/" className="logo">
+          👶 Baby Evvala
         </Link>
 
-        <Link to="/prediction" style={linkStyle}>
-          Prediction
-        </Link>
+        <div className="desktop-links">
+          {links.slice(1).map((item) => (
+            <Link key={item.path} to={item.path} className="nav-link">
+              {item.name}
+            </Link>
+          ))}
+        </div>
 
-        <Link to="/blessings" style={linkStyle}>
-          Blessings
-        </Link>
+        <button className="menu-btn" onClick={() => setOpen(true)}>
+          <Menu size={28} />
+        </button>
+      </nav>
 
-        <Link to="/gallery" style={linkStyle}>
-          Gallery
-        </Link>
+      {open && (
+        <>
+          <div className="drawer-overlay" onClick={() => setOpen(false)} />
 
-        <Link to="/reveal" style={linkStyle}>
-          Reveal
-        </Link>
-      </div>
-    </nav>
+          <aside className="drawer">
+            <div className="drawer-top">
+              <div>
+                <h2>👶 Baby Evvala</h2>
+                <p>Every heartbeat begins with hope.</p>
+              </div>
+
+              <button className="close-btn" onClick={() => setOpen(false)}>
+                <X size={26} />
+              </button>
+            </div>
+
+            <div className="drawer-links">
+              {links.map((item) => (
+                <Link
+                  key={item.path}
+                  to={item.path}
+                  className={
+                    location.pathname === item.path
+                      ? "drawer-link active-drawer-link"
+                      : "drawer-link"
+                  }
+                  onClick={() => setOpen(false)}
+                >
+                  <span>{item.icon}</span>
+                  {item.name}
+                </Link>
+              ))}
+            </div>
+
+            <div className="drawer-footer">
+              Made with ❤️ for Baby Evvala
+            </div>
+          </aside>
+        </>
+      )}
+    </>
   );
 }
-
-const linkStyle = {
-  color: "white",
-  textDecoration: "none",
-  fontWeight: 500,
-};

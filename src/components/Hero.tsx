@@ -3,68 +3,98 @@ import { motion } from "framer-motion";
 export default function Hero() {
   return (
     <section
+      className="page"
       style={{
         textAlign: "center",
-        padding: "150px 20px 80px",
         position: "relative",
         zIndex: 2,
+        paddingBottom: "80px",
       }}
     >
       <motion.div
         initial={{ opacity: 0, y: 12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1 }}
-        style={{ fontSize: "22px", marginBottom: "20px" }}
+        style={{
+          fontSize: "clamp(1rem,2vw,1.4rem)",
+          marginBottom: 20,
+          color: "#ffd6f3",
+          letterSpacing: 1,
+        }}
       >
         ✨ Baby Evvala ✨
       </motion.div>
 
       <motion.h1
-        animate={{ scale: [1, 1.025, 1] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+        animate={{ scale: [1, 1.02, 1] }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
+        className="hero-title"
         style={{
-          fontSize: "64px",
           color: "white",
-          marginBottom: "28px",
-          lineHeight: 1.1,
+          maxWidth: 900,
+          margin: "0 auto 24px",
         }}
       >
-        Every heartbeat begins with hope.
+        Every heartbeat
+        <br />
+        begins with hope.
       </motion.h1>
 
-      <h2 style={{ color: "#ffd6f3", fontSize: "38px" }}>
+      <h2
+        style={{
+          color: "#ffd6f3",
+          fontSize: "clamp(1.4rem,4vw,2.4rem)",
+          margin: 0,
+        }}
+      >
         ఒక కొత్త హృదయం...
       </h2>
 
-      <h2 style={{ color: "#ffd6f3", fontSize: "38px" }}>
+      <h2
+        style={{
+          color: "#ffd6f3",
+          fontSize: "clamp(1.4rem,4vw,2.4rem)",
+          marginTop: 8,
+        }}
+      >
         మన కుటుంబంలోకి
       </h2>
 
-      <p style={{ color: "#e5e7eb", fontSize: "23px", marginTop: "34px" }}>
+      <p
+        className="hero-text"
+        style={{
+          color: "#e5e7eb",
+          marginTop: 30,
+          maxWidth: 650,
+          marginLeft: "auto",
+          marginRight: "auto",
+        }}
+      >
         Join us as we welcome our little miracle.
       </p>
 
       <motion.button
-        whileHover={{ scale: 1.07 }}
-        whileTap={{ scale: 0.96 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.97 }}
         animate={{
           boxShadow: [
-            "0 0 18px rgba(255,95,162,0.45)",
-            "0 0 38px rgba(168,85,247,0.75)",
-            "0 0 18px rgba(255,95,162,0.45)",
+            "0 0 18px rgba(255,95,162,.4)",
+            "0 0 40px rgba(168,85,247,.8)",
+            "0 0 18px rgba(255,95,162,.4)",
           ],
         }}
-        transition={{ duration: 2.5, repeat: Infinity }}
+        transition={{
+          duration: 2.5,
+          repeat: Infinity,
+        }}
+        className="primary-btn"
         style={{
-          marginTop: "42px",
-          background: "linear-gradient(135deg,#ff5fa2,#9d4edd)",
-          color: "white",
-          border: "none",
-          borderRadius: "999px",
-          padding: "18px 44px",
-          fontSize: "20px",
-          fontWeight: 700,
-          cursor: "pointer",
+          maxWidth: 320,
+          marginTop: 40,
         }}
       >
         Begin Journey ❤️

@@ -89,3 +89,138 @@ select {
     transform: scale(1);
   }
 }
+@media (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  nav {
+    width: calc(100% - 24px) !important;
+    margin: 12px auto !important;
+    padding: 12px 16px !important;
+    flex-wrap: wrap !important;
+    gap: 10px !important;
+  }
+
+  nav a {
+    font-size: 14px !important;
+  }
+
+  h1 {
+    font-size: 2.4rem !important;
+    line-height: 1.15 !important;
+  }
+
+  h2 {
+    font-size: 1.6rem !important;
+  }
+
+  main,
+  section {
+    width: 100% !important;
+    max-width: calc(100% - 24px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  input,
+  textarea,
+  select {
+    width: 100% !important;
+    box-sizing: border-box !important;
+    font-size: 16px !important;
+  }
+
+  button {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .submit-btn {
+    width: 100% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  nav {
+    border-radius: 18px !important;
+  }
+}
+.moon {
+  animation: moonFloat 6s ease-in-out infinite;
+}
+
+@keyframes moonFloat {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .moon {
+    top: 105px !important;
+    right: 20px !important;
+    width: 58px !important;
+    height: 58px !important;
+    box-shadow: 0 0 35px rgba(255, 245, 180, 0.55) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .moon {
+    top: 115px !important;
+    right: 16px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
+.moon {
+  animation: moonFloat 6s ease-in-out infinite;
+}
+
+@keyframes moonFloat {
+  0% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .moon {
+    top: 105px !important;
+    right: 20px !important;
+    width: 58px !important;
+    height: 58px !important;
+    box-shadow: 0 0 35px rgba(255, 245, 180, 0.55) !important;
+  }
+}
+
+@media (max-width: 420px) {
+  .moon {
+    top: 115px !important;
+    right: 16px !important;
+    width: 48px !important;
+    height: 48px !important;
+  }
+}
