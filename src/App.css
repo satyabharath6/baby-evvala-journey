@@ -140,3 +140,21 @@
   color: white;
   font-weight: bold;
 }
+.balloon {
+  position: fixed;
+  bottom: -120px;
+  font-size: 48px;
+  animation: floatUp 7s linear infinite;
+  z-index: 20;
+}
+
+@keyframes floatUp {
+  from {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateY(-120vh);
+    opacity: 0;
+  }
+}
