@@ -30,33 +30,35 @@ export default function Story() {
   }, []);
 
   return (
-    <main className="page story-v2">
-      <div className="prediction-header">
-        <h1>❤️ Our Story</h1>
-        <p>Every milestone becomes part of Baby Evvala&apos;s journey.</p>
-      </div>
+    <main className="page journey-page">
+      <section className="journey-hero">
+        <p>✨ Baby Evvala Journey ✨</p>
+        <h1>❤️ Our Journey</h1>
+        <h2>Every heartbeat has a story.</h2>
+      </section>
 
-      <div className="story-timeline">
-        {events.length === 0 ? (
-          <p className="empty-text">No story events added yet.</p>
-        ) : (
-          events.map((event) => (
-            <motion.article
-              key={event.id}
-              whileHover={{ scale: 1.02 }}
-              className="story-card"
-            >
-              <div className="story-emoji">{event.emoji}</div>
+      <section className="journey-timeline">
+        <div className="timeline-line" />
 
-              <div>
-                <h2>{event.title}</h2>
-                <p className="story-date">{event.date}</p>
-                <p className="story-description">{event.description}</p>
-              </div>
-            </motion.article>
-          ))
-        )}
-      </div>
+        {events.map((event, index) => (
+          <motion.article
+            key={event.id}
+            className={index % 2 === 0 ? "journey-card left" : "journey-card right"}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+          >
+            <div className="journey-dot">{event.emoji}</div>
+
+            <div className="journey-content">
+              <span>{event.date}</span>
+              <h2>{event.title}</h2>
+              <p>{event.description}</p>
+            </div>
+          </motion.article>
+        ))}
+      </section>
     </main>
   );
 }

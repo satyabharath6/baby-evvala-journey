@@ -2,71 +2,46 @@ import { Link } from "react-router-dom";
 
 export default function Admin() {
   return (
-    <div
-      style={{
-        maxWidth: 1200,
-        margin: "50px auto",
-        color: "white",
-        padding: 20,
-      }}
-    >
-      <h1
-        style={{
-          textAlign: "center",
-          fontSize: "3rem",
-        }}
-      >
-        👑 Baby Evvala Admin
-      </h1>
+    <main className="page admin-v2">
+      <div className="prediction-header">
+        <h1>👑 Baby Evvala Admin</h1>
+        <p>Manage every part of the Baby Evvala Journey website.</p>
+      </div>
 
-      <p
-        style={{
-          textAlign: "center",
-          color: "#bbb",
-          marginBottom: 50,
-        }}
-      >
-        Manage the entire website from one place.
-      </p>
-
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit,minmax(260px,1fr))",
-          gap: 25,
-        }}
-      >
-        <AdminCard
-  emoji="📸"
-  title="Gallery"
-  description="Upload and manage photos"
-  link="/admin/gallery"
-/>
-<AdminCard
-  emoji="🎉"
-  title="Reveal"
-  description="Manage reveal date and gender"
-  link="/admin/reveal"
-/>
+      <div className="admin-grid">
 
         <AdminCard
-  emoji="🍼"
-  title="Timeline"
-  description="Add journey events"
-  link="/admin/timeline"
-/>
+          emoji="📸"
+          title="Gallery"
+          description="Upload and manage photos"
+          link="/admin/gallery"
+        />
+
+        <AdminCard
+          emoji="🎉"
+          title="Reveal"
+          description="Gender reveal settings"
+          link="/admin/reveal"
+        />
+
+        <AdminCard
+          emoji="🍼"
+          title="Timeline"
+          description="Journey milestones"
+          link="/admin/timeline"
+        />
 
         <AdminCard
           emoji="🔮"
           title="Predictions"
-          description="View all predictions"
+          description="View family predictions"
           link="/admin/predictions"
         />
 
         <AdminCard
           emoji="❤️"
           title="Blessings"
-          description="View all blessings"
+          description="Family blessing wall"
           link="/admin/blessings"
         />
 
@@ -81,8 +56,9 @@ export default function Admin() {
           title="Settings"
           description="Website configuration"
         />
+
       </div>
-    </div>
+    </main>
   );
 }
 
@@ -97,25 +73,19 @@ function AdminCard({
   description: string;
   link?: string;
 }) {
-  const button = <button className="submit-btn">Open</button>;
-
-  return (
-    <div
-      style={{
-        background: "rgba(255,255,255,.08)",
-        borderRadius: 20,
-        padding: 30,
-        textAlign: "center",
-        backdropFilter: "blur(10px)",
-      }}
-    >
-      <div style={{ fontSize: "3rem" }}>{emoji}</div>
+  const card = (
+    <div className="admin-card">
+      <div className="admin-icon">{emoji}</div>
 
       <h2>{title}</h2>
 
-      <p style={{ color: "#ccc" }}>{description}</p>
+      <p>{description}</p>
 
-      {link ? <Link to={link}>{button}</Link> : button}
+      <button className="primary-btn">
+        Open
+      </button>
     </div>
   );
+
+  return link ? <Link to={link}>{card}</Link> : card;
 }
