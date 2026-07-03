@@ -1,99 +1,174 @@
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import Countdown from "react-countdown";
+import Confetti from "react-confetti";
 import confetti from "canvas-confetti";
+import { db } from "../firebase";
+import { doc, getDoc } from "firebase/firestore";
+
+type RevealSettings = {
+  gender: "boy" | "girl";
+  revealDate: string;
+  enabled: boolean;
+};
 
 export default function Reveal() {
-  const [revealed, setRevealed] = useState(false);
+  const [settings, setSettings] = useState<RevealSettings | null>(null);
+  const [hasCelebrated, setHasCelebrated] = useState(false);
+  const [windowSize, setWindowSize] = useState({
+    width: window.innerWidth,
+    height: window.innerHeight,
+  });
 
-  const celebrate = () => {
-    confetti({ particleCount: 200, spread: 120, origin: { y: 0.6 } });
-    confetti({ particleCount: 120, angle: 60, spread: 80, origin: { x: 0 } });
-    confetti({ particleCount: 120, angle: 120, spread: 80, origin: { x: 1 } });
+  useEffect(() => {
+    async function loadReveal() {
+      const snap = await getDoc(doc(db, "settings", "reveal"));
+      if (snap.exists()) {
+        setSettings(snap.data() as RevealSettings);
+      }
+    }
 
-    setRevealed(true);
-  };
+    loadReveal();
+
+    const resize = () =>
+      setWindowSize({
+        width: window.innerWidth,
+        height: window.innerHeight,
+      });
+
+    window.addEventListener("resize", resize);
+    return () => window.removeEventListener("resize", resize);
+  }, []);
+
+  function fireCelebration() {
+    if (hasCelebrated) return;
+
+    setHasCelebrated(true);
+
+    const colors =
+      settings?.gender === "boy"
+        ? ["#4dabf7", "#74c0fc", "#ffffff"]
+        : ["#ff4da6", "#ff85c1", "#ffffff"];
+
+    const duration = 5000;
+    const end = Date.now() + duration;
+
+    const interval = window.setInterval(() => {
+      if (Date.now() > end) {
+        clearInterval(interval);
+        return;
+      }
+
+      confetti({
+        particleCount: 80,
+        spread: 90,
+        startVelocity: 55,
+        origin: { x: Math.random(), y: Math.random() * 0.45 },
+        colors,
+      });
+    }, 350);
+  }
+
+  if (!settings) {
+    return (
+      <h2 style={{ color: "white", textAlign: "center", marginTop: 120 }}>
+        Loading...
+      </h2>
+    );
+  }
+
+  if (!settings.enabled) {
+    return (
+      <h2 style={{ color: "white", textAlign: "center", marginTop: 120 }}>
+        Reveal Coming Soon ❤️
+      </h2>
+    );
+  }
+
+  const revealTime = new Date(settings.revealDate).getTime();
 
   return (
-    <motion.main
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
+    <Countdown
+      date={revealTime}
+      renderer={({ completed, days, hours, minutes, seconds }) => {
+        if (!completed) {
+          return (
+            <main style={{ color: "white", textAlign: "center", marginTop: 120 }}>
+              <h1 style={{ fontSize: "4.5rem" }}>🎉 Gender Reveal</h1>
+
+              <p style={{ fontSize: "1.5rem", color: "#ddd" }}>
+                Countdown to Baby Evvala&apos;s Big Reveal
+              </p>
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 30,
+                  marginTop: 60,
+                  flexWrap: "wrap",
+                }}
+              >
+                <TimeCard value={days} label="Days" />
+                <TimeCard value={hours} label="Hours" />
+                <TimeCard value={minutes} label="Minutes" />
+                <TimeCard value={seconds} label="Seconds" />
+              </div>
+            </main>
+          );
+        }
+
+        fireCelebration();
+
+        return (
+          <>
+            <Confetti
+              width={windowSize.width}
+              height={windowSize.height}
+              recycle
+              numberOfPieces={400}
+            />
+
+            <main style={{ color: "white", textAlign: "center", marginTop: 120 }}>
+              <div style={{ fontSize: "7rem", animation: "pulse 1.5s infinite" }}>
+                {settings.gender === "boy" ? "💙" : "💖"}
+              </div>
+
+              <h1
+                style={{
+                  fontSize: "5.5rem",
+                  animation: "pulse 1.5s infinite",
+                  textShadow: "0 0 25px rgba(255,255,255,.8)",
+                }}
+              >
+                {settings.gender === "boy" ? "IT'S A BOY!" : "IT'S A GIRL!"}
+              </h1>
+
+              <h2 style={{ marginTop: 30, fontSize: "2rem" }}>
+                Welcome Baby Evvala ❤️
+              </h2>
+            </main>
+          </>
+        );
+      }}
+    />
+  );
+}
+
+function TimeCard({ value, label }: { value: number; label: string }) {
+  return (
+    <div
       style={{
-        minHeight: "80vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        flexDirection: "column",
-        color: "white",
-        textAlign: "center",
-        padding: "20px",
+        width: 150,
+        padding: 25,
+        borderRadius: 25,
+        background: "rgba(255,255,255,.08)",
+        border: "1px solid rgba(255,255,255,.15)",
       }}
     >
-      {!revealed ? (
-        <>
-          <motion.div
-            animate={{ y: [0, -15, 0], rotate: [-3, 3, -3] }}
-            transition={{ repeat: Infinity, duration: 2 }}
-            style={{ fontSize: "7rem" }}
-          >
-            🎁
-          </motion.div>
-
-          <h1 style={{ fontSize: "3rem" }}>The Big Reveal</h1>
-
-          <p style={{ color: "#ddd", maxWidth: 500, marginBottom: 30 }}>
-            One little heartbeat... One unforgettable surprise...
-          </p>
-
-          <motion.button
-            whileHover={{ scale: 1.08 }}
-            whileTap={{ scale: 0.95 }}
-            onClick={celebrate}
-            style={{
-              padding: "18px 40px",
-              border: "none",
-              borderRadius: "50px",
-              cursor: "pointer",
-              fontSize: "1.2rem",
-              background: "linear-gradient(90deg,#ff5db1,#8b5cf6)",
-              color: "white",
-              boxShadow: "0 0 35px rgba(255, 93, 177, 0.6)",
-            }}
-          >
-            Open Gift ❤️
-          </motion.button>
-        </>
-      ) : (
-        <>
-          {["🎈", "💗", "🎀", "🎈", "💖", "🌸"].map((item, i) => (
-            <div
-              key={i}
-              className="balloon"
-              style={{
-                left: `${15 + i * 13}%`,
-                animationDelay: `${i * 0.6}s`,
-              }}
-            >
-              {item}
-            </div>
-          ))}
-
-          <motion.div
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8 }}
-          >
-            <div style={{ fontSize: "7rem" }}>💗</div>
-
-            <h1 style={{ fontSize: "4.5rem", marginTop: 20 }}>
-              IT'S A GIRL!
-            </h1>
-
-            <p style={{ color: "#ddd", marginTop: 20, fontSize: "1.3rem" }}>
-              Thank you for celebrating Baby Evvala's journey with us ❤️
-            </p>
-          </motion.div>
-        </>
-      )}
-    </motion.main>
+      <div style={{ fontSize: "3rem", fontWeight: "bold" }}>{value}</div>
+      <div style={{ marginTop: 10, color: "#ccc", fontSize: "1.2rem" }}>
+        {label}
+      </div>
+    </div>
   );
 }

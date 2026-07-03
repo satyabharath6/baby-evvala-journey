@@ -42,6 +42,12 @@ export default function Admin() {
   description="Upload and manage photos"
   link="/admin/gallery"
 />
+<AdminCard
+  emoji="🎉"
+  title="Reveal"
+  description="Manage reveal date and gender"
+  link="/admin/reveal"
+/>
 
         <AdminCard
   emoji="🍼"

@@ -13,12 +13,14 @@ import {
 
 type TimelineEvent = {
   id: string;
+  emoji: string;
   title: string;
   date: string;
   description: string;
 };
 
 export default function AdminTimeline() {
+  const [emoji, setEmoji] = useState("");
   const [title, setTitle] = useState("");
   const [date, setDate] = useState("");
   const [description, setDescription] = useState("");
@@ -26,7 +28,6 @@ export default function AdminTimeline() {
 
   async function loadEvents() {
     const q = query(collection(db, "timeline"), orderBy("createdAt", "desc"));
-
     const snapshot = await getDocs(q);
 
     const data = snapshot.docs.map((d) => ({
@@ -42,18 +43,20 @@ export default function AdminTimeline() {
   }, []);
 
   async function saveEvent() {
-    if (!title || !date || !description) {
+    if (!emoji || !title || !date || !description) {
       alert("Please complete all fields.");
       return;
     }
 
     await addDoc(collection(db, "timeline"), {
+      emoji,
       title,
       date,
       description,
       createdAt: serverTimestamp(),
     });
 
+    setEmoji("");
     setTitle("");
     setDate("");
     setDescription("");
@@ -65,7 +68,6 @@ export default function AdminTimeline() {
     if (!window.confirm("Delete this event?")) return;
 
     await deleteDoc(doc(db, "timeline", id));
-
     loadEvents();
   }
 
@@ -78,7 +80,7 @@ export default function AdminTimeline() {
         color: "white",
       }}
     >
-      <h1 style={{ fontSize: "3rem" }}>
+      <h1 style={{ fontSize: "3rem", marginBottom: 30 }}>
         🍼 Timeline Manager
       </h1>
 
@@ -88,39 +90,52 @@ export default function AdminTimeline() {
           padding: 30,
           borderRadius: 24,
           marginBottom: 40,
+          border: "1px solid rgba(255,255,255,.15)",
         }}
       >
-        <label>Title</label>
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            gap: 18,
+          }}
+        >
+          <label>Emoji</label>
+          <input
+            value={emoji}
+            onChange={(e) => setEmoji(e.target.value)}
+            placeholder="❤️ 🩺 👣 🎀"
+          />
 
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="First Ultrasound"
-        />
+          <label>Title</label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="First Heartbeat"
+          />
 
-        <label>Date</label>
+          <label>Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
 
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
+          <label>Description</label>
+          <textarea
+            rows={5}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Baby's heartbeat made us emotional..."
+          />
 
-        <label>Description</label>
-
-        <textarea
-          rows={5}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Baby's heartbeat made us emotional..."
-        />
-
-        <button className="submit-btn" onClick={saveEvent}>
-          Save Event ❤️
-        </button>
+          <button className="submit-btn" onClick={saveEvent}>
+            Save Event ❤️
+          </button>
+        </div>
       </div>
 
-      <h2>Journey Events</h2>
+      <h2 style={{ marginBottom: 20 }}>Journey Events</h2>
 
       {events.map((event) => (
         <div
@@ -130,13 +145,16 @@ export default function AdminTimeline() {
             borderRadius: 20,
             padding: 25,
             marginBottom: 20,
+            border: "1px solid rgba(255,255,255,.15)",
           }}
         >
-          <h2>{event.title}</h2>
+          <h2>
+            {event.emoji} {event.title}
+          </h2>
 
-          <p>{event.date}</p>
+          <p style={{ color: "#ccc" }}>{event.date}</p>
 
-          <p>{event.description}</p>
+          <p style={{ lineHeight: 1.7 }}>{event.description}</p>
 
           <button
             onClick={() => removeEvent(event.id)}
@@ -147,6 +165,7 @@ export default function AdminTimeline() {
               padding: "10px 20px",
               borderRadius: 10,
               cursor: "pointer",
+              marginTop: 10,
             }}
           >
             🗑 Delete
