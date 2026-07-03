@@ -1,11 +1,15 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import StarsBackground from "./StarsBackground";
 
 export default function HeroV2() {
   return (
     <section className="hero-v2 page">
+
+<StarsBackground />
+<div className="shooting-star" />
       <motion.div
-        className="hero-v2-content"
+  className="hero-v2-content glass-hero"
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.9 }}
