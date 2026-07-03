@@ -1,11 +1,11 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import StarsBackground from "./StarsBackground";
-
+import FloatingOrbs from "./FloatingOrbs";
 export default function HeroV2() {
   return (
     <section className="hero-v2 page">
-
+<FloatingOrbs />
 <StarsBackground />
 <div className="shooting-star" />
       <motion.div
