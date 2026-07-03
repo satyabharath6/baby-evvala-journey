@@ -1,0 +1,78 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: #070b1a;
+  color: white;
+  font-family: Arial, sans-serif;
+}
+
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+.star {
+  position: fixed;
+  background: white;
+  border-radius: 50%;
+  opacity: 0.7;
+  pointer-events: none;
+  animation: twinkle 4s infinite ease-in-out;
+}
+
+.moon {
+  position: fixed;
+  top: 90px;
+  right: 90px;
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fff7cc, #f6d365);
+  box-shadow: 0 0 50px rgba(255, 245, 180, 0.7);
+  pointer-events: none;
+}
+
+.shooting-star {
+  position: fixed;
+  top: 120px;
+  left: -120px;
+  width: 120px;
+  height: 2px;
+  background: linear-gradient(90deg, white, transparent);
+  opacity: 0.8;
+  transform: rotate(-25deg);
+  animation: shoot 7s infinite;
+  pointer-events: none;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(0.8);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.3);
+  }
+}
+
+@keyframes shoot {
+  0% {
+    transform: translateX(0) translateY(0) rotate(-25deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  35% {
+    transform: translateX(120vw) translateY(350px) rotate(-25deg);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
