@@ -21,7 +21,7 @@ import AdminGallery from "./pages/AdminGallery";
 import AdminPredictions from "./pages/AdminPredictions";
 import AdminBlessings from "./pages/AdminBlessings";
 import AdminTimeline from "./pages/AdminTimeline";
-
+import AdminHomeLetter from "./pages/AdminHomeLetter";
 const allowedEmails = [
   "satyabharath6@gmail.com",
   "honeysrievvala@gmail.com",
@@ -80,6 +80,7 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={<Home />} />
+          
           <Route path="/story" element={<Story />} />
           <Route path="/prediction" element={<Prediction />} />
           <Route path="/blessings" element={<Blessings />} />
@@ -87,6 +88,14 @@ export default function App() {
           <Route path="/reveal" element={<Reveal />} />
 
           <Route path="/admin/login" element={<AdminLogin />} />
+          <Route
+  path="/admin/home-letter"
+  element={
+    <ProtectedAdmin>
+      <AdminHomeLetter />
+    </ProtectedAdmin>
+  }
+/>
 <Route
   path="/admin/reveal"
   element={
