@@ -6,8 +6,14 @@ import type { GalleryPhoto } from "../types/gallery";
 
 export default function Gallery() {
   const { photos } = useGallery();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
+
+  function getCaption(photo: GalleryPhoto) {
+    return language === "te"
+      ? photo.captionTe || photo.caption
+      : photo.caption;
+  }
 
   return (
     <main className="page gallery-v2">
@@ -23,24 +29,28 @@ export default function Gallery() {
         </div>
       ) : (
         <div className="gallery-grid-v2">
-          {photos.map((photo) => (
-            <motion.article
-              key={photo.id}
-              whileHover={{ scale: 1.02 }}
-              onClick={() => setSelectedPhoto(photo)}
-              className="gallery-card-v2"
-            >
-              <img
-                src={photo.imageUrl}
-                alt={photo.caption || t.gallery.fallbackTitle}
-              />
+          {photos.map((photo) => {
+            const caption = getCaption(photo);
 
-              <div>
-                <h3>{photo.caption || t.gallery.fallbackTitle}</h3>
-                <p>{t.gallery.tapToView}</p>
-              </div>
-            </motion.article>
-          ))}
+            return (
+              <motion.article
+                key={photo.id}
+                whileHover={{ scale: 1.02 }}
+                onClick={() => setSelectedPhoto(photo)}
+                className="gallery-card-v2"
+              >
+                <img
+                  src={photo.imageUrl}
+                  alt={caption || t.gallery.fallbackTitle}
+                />
+
+                <div>
+                  <h3>{caption || t.gallery.fallbackTitle}</h3>
+                  <p>{t.gallery.tapToView}</p>
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
       )}
 
@@ -61,9 +71,9 @@ export default function Gallery() {
           >
             <img
               src={selectedPhoto.imageUrl}
-              alt={selectedPhoto.caption || t.gallery.fallbackTitle}
+              alt={getCaption(selectedPhoto) || t.gallery.fallbackTitle}
             />
-            <h2>{selectedPhoto.caption || t.gallery.fallbackTitle}</h2>
+            <h2>{getCaption(selectedPhoto) || t.gallery.fallbackTitle}</h2>
           </div>
         </div>
       )}

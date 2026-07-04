@@ -6,9 +6,15 @@ import "./LatestJourney.css";
 
 export default function LatestJourney() {
   const { event } = useLatestTimelineEvent();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   if (!event) return null;
+
+  const title = language === "te" ? event.titleTe || event.title : event.title;
+  const description =
+    language === "te"
+      ? event.descriptionTe || event.description
+      : event.description;
 
   return (
     <motion.section
@@ -22,9 +28,9 @@ export default function LatestJourney() {
 
       <div>
         <p className="latest-label">{t.home.latestJourneyLabel}</p>
-        <h2>{event.title}</h2>
+        <h2>{title}</h2>
         <p className="latest-date">{event.date}</p>
-        <p className="latest-description">{event.description}</p>
+        <p className="latest-description">{description}</p>
 
         <Link to="/story" className="hero-v2-button">
           {t.home.latestJourneyButton}

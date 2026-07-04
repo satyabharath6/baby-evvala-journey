@@ -6,7 +6,7 @@ import "./LatestGallery.css";
 
 export default function LatestGallery() {
   const { photos } = useGallery();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const latestPhotos = photos.slice(0, 3);
 
@@ -26,15 +26,20 @@ export default function LatestGallery() {
       </div>
 
       <div className="latest-gallery-grid">
-        {latestPhotos.map((photo) => (
-          <article key={photo.id} className="latest-gallery-card">
-            <img
-              src={photo.imageUrl}
-              alt={photo.caption || t.home.latestGalleryFallbackAlt}
-            />
-            <h3>{photo.caption || t.home.latestGalleryFallbackTitle}</h3>
-          </article>
-        ))}
+        {latestPhotos.map((photo) => {
+          const caption =
+            language === "te" ? photo.captionTe || photo.caption : photo.caption;
+
+          return (
+            <article key={photo.id} className="latest-gallery-card">
+              <img
+                src={photo.imageUrl}
+                alt={caption || t.home.latestGalleryFallbackAlt}
+              />
+              <h3>{caption || t.home.latestGalleryFallbackTitle}</h3>
+            </article>
+          );
+        })}
       </div>
 
       <Link to="/gallery" className="hero-v2-button">
