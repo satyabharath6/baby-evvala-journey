@@ -1,0 +1,42 @@
+.admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-form label {
+  color: #ffd6f3;
+  font-weight: 700;
+}
+
+.admin-form input,
+.admin-form textarea,
+.admin-form select {
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,.18);
+  background: rgba(255,255,255,.1);
+  color: white;
+  font-size: 1rem;
+}
+
+.admin-form textarea {
+  resize: vertical;
+  min-height: 140px;
+}
+
+.admin-form input::placeholder,
+.admin-form textarea::placeholder {
+  color: rgba(255,255,255,.45);
+}
+
+.admin-form-card {
+  padding: 32px;
+}
+
+@media (max-width: 700px) {
+  .admin-form-card {
+    padding: 22px;
+  }
+}

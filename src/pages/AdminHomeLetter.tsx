@@ -40,26 +40,28 @@ export default function AdminHomeLetter() {
         <p>Edit the welcome letter shown on the homepage.</p>
       </div>
 
-      <div className="glass-card" style={{ padding: 30 }}>
-        <label>Title</label>
-        <input value={title} onChange={(e) => setTitle(e.target.value)} />
+      <div className="glass-card admin-form-card">
+        <div className="admin-form">
+          <label>Title</label>
+          <input value={title} onChange={(e) => setTitle(e.target.value)} />
 
-        <label>Letter Body</label>
-        <textarea
-          rows={12}
-          value={body}
-          onChange={(e) => setBody(e.target.value)}
-        />
+          <label>Letter Body</label>
+          <textarea
+            rows={12}
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+          />
 
-        <label>Signature</label>
-        <input
-          value={signature}
-          onChange={(e) => setSignature(e.target.value)}
-        />
+          <label>Signature</label>
+          <input
+            value={signature}
+            onChange={(e) => setSignature(e.target.value)}
+          />
 
-        <button className="primary-btn" onClick={handleSave} disabled={saving}>
-          {saving ? "Saving..." : "Save Letter ❤️"}
-        </button>
+          <button className="primary-btn" onClick={handleSave} disabled={saving}>
+            {saving ? "Saving..." : "Save Letter ❤️"}
+          </button>
+        </div>
       </div>
     </main>
   );

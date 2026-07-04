@@ -126,7 +126,8 @@ export default function AdminTimeline() {
         <p>Create meaningful memories for Baby ఇవ్వల&apos;s journey.</p>
       </div>
 
-      <div className="glass-card" style={{ padding: 30, marginBottom: 40 }}>
+      <div className="glass-card admin-form-card" style={{ marginBottom: 40 }}>
+  <div className="admin-form">
         <label>Emoji</label>
         <input
           value={emoji}
@@ -182,7 +183,7 @@ export default function AdminTimeline() {
           {saving ? "Saving..." : "Save Memory ❤️"}
         </button>
       </div>
-
+</div>
       <h2>Saved Journey Memories</h2>
 
       {events.map((event) => (

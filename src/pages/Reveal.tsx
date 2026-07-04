@@ -2,17 +2,11 @@ import { useEffect, useState } from "react";
 import Countdown from "react-countdown";
 import Confetti from "react-confetti";
 import confetti from "canvas-confetti";
-import { db } from "../firebase";
-import { doc, getDoc } from "firebase/firestore";
-
-type RevealSettings = {
-  gender: "boy" | "girl";
-  revealDate: string;
-  enabled: boolean;
-};
+import { useRevealSettings } from "../hooks/useRevealSettings";
+import "./RevealCinematic.css";
 
 export default function Reveal() {
-  const [settings, setSettings] = useState<RevealSettings | null>(null);
+  const { settings } = useRevealSettings();
   const [hasCelebrated, setHasCelebrated] = useState(false);
   const [windowSize, setWindowSize] = useState({
     width: window.innerWidth,
@@ -20,22 +14,11 @@ export default function Reveal() {
   });
 
   useEffect(() => {
-    async function loadReveal() {
-      const snap = await getDoc(doc(db, "settings", "reveal"));
-
-      if (snap.exists()) {
-        setSettings(snap.data() as RevealSettings);
-      }
-    }
-
-    loadReveal();
-
-    const resize = () => {
+    const resize = () =>
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
       });
-    };
 
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
@@ -43,7 +26,6 @@ export default function Reveal() {
 
   function fireCelebration(gender: "boy" | "girl") {
     if (hasCelebrated) return;
-
     setHasCelebrated(true);
 
     const colors =
@@ -51,8 +33,7 @@ export default function Reveal() {
         ? ["#4dabf7", "#74c0fc", "#ffffff"]
         : ["#ff4da6", "#ff85c1", "#ffffff"];
 
-    const duration = 6000;
-    const end = Date.now() + duration;
+    const end = Date.now() + 7000;
 
     const interval = window.setInterval(() => {
       if (Date.now() > end) {
@@ -62,39 +43,29 @@ export default function Reveal() {
 
       confetti({
         particleCount: 90,
-        spread: 100,
-        startVelocity: 55,
+        spread: 110,
+        startVelocity: 58,
         origin: {
           x: Math.random(),
           y: Math.random() * 0.45,
         },
         colors,
       });
-    }, 320);
+    }, 300);
   }
 
   if (!settings) {
-    return (
-      <main className="page reveal-page">
-        <div className="reveal-card">
-          <div className="reveal-icon">✨</div>
-          <h1>Loading...</h1>
-          <p>Preparing Baby Evvala&apos;s special moment.</p>
-        </div>
-      </main>
-    );
+    return <RevealShell icon="✨" title="Loading..." text="Preparing Baby ఇవ్వల's special moment." />;
   }
 
   if (!settings.enabled) {
     return (
-      <main className="page reveal-page">
-        <div className="reveal-card">
-          <div className="reveal-icon">🎁</div>
-          <p className="reveal-eyebrow">Baby Evvala</p>
-          <h1>Reveal Coming Soon</h1>
-          <p>Our little miracle&apos;s special moment is almost here ❤️</p>
-        </div>
-      </main>
+      <RevealShell
+        icon="🎁"
+        eyebrow="Baby ఇవ్వల"
+        title="Reveal Coming Soon"
+        text="Our little miracle's special moment is almost here ❤️"
+      />
     );
   }
 
@@ -106,32 +77,29 @@ export default function Reveal() {
       renderer={({ completed, days, hours, minutes, seconds }) => {
         if (!completed) {
           return (
-            <main className="page reveal-page">
-              <div className="reveal-card">
-                <div className="reveal-icon">🎉</div>
+            <main className="reveal-cinematic-page">
+              <div className="reveal-stars" />
+              <div className="reveal-moon" />
 
-                <p className="reveal-eyebrow">Baby Evvala</p>
-
-                <h1>Gender Reveal</h1>
-
+              <section className="reveal-cinematic-card">
+                <p className="reveal-eyebrow">🎉 Baby ఇవ్వల Reveal</p>
+                <h1>The big moment is almost here</h1>
                 <p>
-                  The countdown has begun. Soon, our family will know the little
-                  heart growing with love.
+                  Soon, our family will share one beautiful moment together.
                 </p>
 
-                <div className="countdown-grid">
+                <div className="cinematic-countdown-grid">
                   <TimeCard value={days} label="Days" />
                   <TimeCard value={hours} label="Hours" />
                   <TimeCard value={minutes} label="Minutes" />
                   <TimeCard value={seconds} label="Seconds" />
                 </div>
-              </div>
+              </section>
             </main>
           );
         }
 
         fireCelebration(settings.gender);
-
         const isBoy = settings.gender === "boy";
 
         return (
@@ -140,30 +108,23 @@ export default function Reveal() {
               width={windowSize.width}
               height={windowSize.height}
               recycle
-              numberOfPieces={420}
+              numberOfPieces={450}
             />
 
-            <main className="page reveal-page">
-              <div
-                className={
-                  isBoy
-                    ? "reveal-card final-reveal boy-reveal"
-                    : "reveal-card final-reveal girl-reveal"
-                }
-              >
-                <div className="final-heart">{isBoy ? "💙" : "💖"}</div>
+            <main className={isBoy ? "reveal-final boy-final" : "reveal-final girl-final"}>
+              <div className="reveal-stars" />
+              <div className="reveal-heartbeat" />
 
+              <section className="final-reveal-card">
                 <p className="reveal-eyebrow">The wait is over</p>
-
+                <div className="final-heart">{isBoy ? "💙" : "💖"}</div>
                 <h1>{isBoy ? "It’s a Boy!" : "It’s a Girl!"}</h1>
-
-                <p className="final-subtitle">Welcome, Baby Evvala ❤️</p>
-
-                <p className="reveal-thanks">
+                <h2>Welcome, Baby ఇవ్వల ❤️</h2>
+                <p>
                   Thank you for being part of this beautiful journey and
                   celebrating this precious moment with us.
                 </p>
-              </div>
+              </section>
             </main>
           </>
         );
@@ -172,10 +133,36 @@ export default function Reveal() {
   );
 }
 
+function RevealShell({
+  icon,
+  eyebrow,
+  title,
+  text,
+}: {
+  icon: string;
+  eyebrow?: string;
+  title: string;
+  text: string;
+}) {
+  return (
+    <main className="reveal-cinematic-page">
+      <div className="reveal-stars" />
+      <div className="reveal-moon" />
+
+      <section className="reveal-cinematic-card">
+        <div className="reveal-icon">{icon}</div>
+        {eyebrow && <p className="reveal-eyebrow">{eyebrow}</p>}
+        <h1>{title}</h1>
+        <p>{text}</p>
+      </section>
+    </main>
+  );
+}
+
 function TimeCard({ value, label }: { value: number; label: string }) {
   return (
-    <div className="time-card">
-      <div>{String(value).padStart(2, "0")}</div>
+    <div className="cinematic-time-card">
+      <h2>{String(value).padStart(2, "0")}</h2>
       <span>{label}</span>
     </div>
   );
