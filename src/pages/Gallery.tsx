@@ -1,32 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { motion } from "framer-motion";
-import { db } from "../firebase";
-import { collection, onSnapshot, orderBy, query } from "firebase/firestore";
-
-type GalleryPhoto = {
-  id: string;
-  imageUrl: string;
-  caption: string;
-};
+import { useGallery } from "../hooks/useGallery";
+import type { GalleryPhoto } from "../types/gallery";
 
 export default function Gallery() {
-  const [photos, setPhotos] = useState<GalleryPhoto[]>([]);
+  const { photos } = useGallery();
   const [selectedPhoto, setSelectedPhoto] = useState<GalleryPhoto | null>(null);
-
-  useEffect(() => {
-    const q = query(collection(db, "gallery"), orderBy("createdAt", "desc"));
-
-    const unsubscribe = onSnapshot(q, (snapshot) => {
-      const data = snapshot.docs.map((doc) => ({
-        id: doc.id,
-        ...(doc.data() as Omit<GalleryPhoto, "id">),
-      }));
-
-      setPhotos(data);
-    });
-
-    return () => unsubscribe();
-  }, []);
 
   return (
     <main className="page gallery-v2">

@@ -1,0 +1,121 @@
+/* ===================================================
+   GLOBAL STYLES
+   Baby Evvala Journey Design System
+=================================================== */
+
+@import "./variables.css";
+
+/* Reset */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+
+  font-family:
+    Inter,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
+
+  background: linear-gradient(
+    180deg,
+    #090b18 0%,
+    #121630 45%,
+    #090b18 100%
+  );
+
+  color: var(--color-white);
+}
+
+/* Links */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Images */
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+/* Buttons */
+
+button {
+  font: inherit;
+}
+
+/* Main Container */
+
+.page {
+  width: var(--page-width);
+  max-width: var(--page-max);
+  margin: auto;
+  padding-top: 120px;
+}
+
+/* Glass Card */
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-lg);
+}
+
+/* Primary Button */
+
+.primary-btn {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+
+  padding: 18px 36px;
+
+  border: none;
+  border-radius: var(--radius-pill);
+
+  background: linear-gradient(
+    135deg,
+    var(--color-rose-pink),
+    var(--color-deep-purple)
+  );
+
+  color: white;
+
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: 0.3s;
+}
+
+.primary-btn:hover {
+  transform: translateY(-2px);
+
+  box-shadow: var(--shadow-glow-pink);
+}
+
+/* Responsive */
+
+@media (max-width: 900px) {
+  .page {
+    width: 95%;
+    padding-top: 100px;
+  }
+}
