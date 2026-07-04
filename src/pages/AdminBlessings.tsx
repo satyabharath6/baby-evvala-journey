@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
+import CMSLayout from "../components/cms/CMSLayout";
 import {
   collection,
   getDocs,
   deleteDoc,
   doc,
+  orderBy,
+  query,
 } from "firebase/firestore";
 import { db } from "../firebase";
 
@@ -12,7 +15,7 @@ interface Blessing {
   name: string;
   city: string;
   message: string;
-  submittedAt?: any;
+  submittedAt?: unknown;
 }
 
 export default function AdminBlessings() {
@@ -20,7 +23,8 @@ export default function AdminBlessings() {
   const [search, setSearch] = useState("");
 
   async function loadBlessings() {
-    const snapshot = await getDocs(collection(db, "blessings"));
+    const q = query(collection(db, "blessings"), orderBy("submittedAt", "desc"));
+    const snapshot = await getDocs(q);
 
     const data = snapshot.docs.map((docItem) => ({
       id: docItem.id,
@@ -33,9 +37,14 @@ export default function AdminBlessings() {
   async function removeBlessing(id: string) {
     if (!window.confirm("Delete this blessing?")) return;
 
-    await deleteDoc(doc(db, "blessings", id));
-
-    loadBlessings();
+    try {
+      await deleteDoc(doc(db, "blessings", id));
+      await loadBlessings();
+      alert("Blessing deleted.");
+    } catch (error) {
+      console.error(error);
+      alert("Delete failed.");
+    }
   }
 
   useEffect(() => {
@@ -43,92 +52,113 @@ export default function AdminBlessings() {
   }, []);
 
   const filtered = blessings.filter((b) =>
-    (
-      b.name +
-      b.city +
-      b.message
-    )
+    `${b.name} ${b.city} ${b.message}`
       .toLowerCase()
       .includes(search.toLowerCase())
   );
 
   return (
-    <main
-      style={{
-        maxWidth: 1200,
-        margin: "40px auto",
-        padding: 20,
-      }}
-    >
-      <h1
-        style={{
-          color: "white",
-          fontSize: "3rem",
-        }}
-      >
-        ❤️ Blessing Manager
-      </h1>
-
-      <p style={{ color: "#ddd" }}>
-        Total Blessings: {filtered.length}
+    <CMSLayout title="❤️ Blessings">
+      <p style={{ color: "#ccc", marginBottom: 30 }}>
+        View and manage blessings submitted by family and friends for Baby ఇవ్వల.
       </p>
 
-      <input
-        placeholder="Search..."
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        style={{
-          width: "100%",
-          padding: 15,
-          borderRadius: 12,
-          marginBottom: 25,
-          fontSize: 18,
-        }}
-      />
+      <div className="admin-stats-grid" style={{ marginBottom: 30 }}>
+        <StatCard title="Total Blessings" value={blessings.length} emoji="💌" />
+        <StatCard title="Showing" value={filtered.length} emoji="🔎" />
+      </div>
 
-      {filtered.map((b) => (
+      <div className="glass-card admin-form-card" style={{ marginBottom: 34 }}>
+        <div className="admin-form">
+          <label>Search Blessings</label>
+          <input
+            placeholder="Search by name, city, or message..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
+      </div>
+
+      <h2>Submitted Blessings</h2>
+
+      {filtered.length === 0 ? (
+        <div className="glass-card" style={{ padding: 28, textAlign: "center" }}>
+          <h3>No blessings found</h3>
+          <p style={{ color: "#ccc" }}>
+            Try changing your search or wait for family blessings to arrive.
+          </p>
+        </div>
+      ) : (
         <div
-          key={b.id}
           style={{
-            background: "#242843",
-            padding: 25,
-            borderRadius: 20,
-            marginBottom: 20,
-            color: "white",
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit,minmax(300px,1fr))",
+            gap: 25,
           }}
         >
-          <h2>{b.name}</h2>
+          {filtered.map((b) => (
+            <div
+              key={b.id}
+              className="glass-card"
+              style={{
+                padding: 28,
+                boxShadow: "0 10px 30px rgba(0,0,0,.25)",
+              }}
+            >
+              <div style={{ fontSize: "2.4rem", marginBottom: 10 }}>💌</div>
 
-          <p>
-            <strong>City:</strong> {b.city}
-          </p>
+              <h2 style={{ marginTop: 0 }}>{b.name || "Unknown"}</h2>
 
-          <p
-            style={{
-              marginTop: 15,
-              marginBottom: 20,
-              whiteSpace: "pre-wrap",
-            }}
-          >
-            {b.message}
-          </p>
+              <p style={{ color: "#ccc" }}>📍 {b.city || "No city"}</p>
 
-          <button
-            onClick={() => removeBlessing(b.id)}
-            style={{
-              padding: "12px 24px",
-              borderRadius: 10,
-              border: "none",
-              cursor: "pointer",
-              background: "#ff4d6d",
-              color: "white",
-              fontWeight: "bold",
-            }}
-          >
-            🗑 Delete
-          </button>
+              <p
+                style={{
+                  marginTop: 18,
+                  marginBottom: 22,
+                  whiteSpace: "pre-wrap",
+                  lineHeight: 1.8,
+                }}
+              >
+                {b.message || "No message"}
+              </p>
+
+              <button
+                onClick={() => removeBlessing(b.id)}
+                style={{
+                  width: "100%",
+                  padding: 14,
+                  borderRadius: 14,
+                  border: "none",
+                  cursor: "pointer",
+                  background: "linear-gradient(90deg,#ff4d6d,#ff006e)",
+                  color: "white",
+                  fontWeight: "bold",
+                }}
+              >
+                🗑 Delete
+              </button>
+            </div>
+          ))}
         </div>
-      ))}
-    </main>
+      )}
+    </CMSLayout>
+  );
+}
+
+function StatCard({
+  title,
+  value,
+  emoji,
+}: {
+  title: string;
+  value: number;
+  emoji: string;
+}) {
+  return (
+    <div className="admin-stat-card">
+      <div>{emoji}</div>
+      <h2>{value}</h2>
+      <p>{title}</p>
+    </div>
   );
 }
