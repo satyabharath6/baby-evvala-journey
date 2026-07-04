@@ -8,7 +8,8 @@ import {
 } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth";
-
+import { LanguageProvider } from "./i18n/LanguageContext";
+import LanguageToggle from "./components/LanguageToggle";
 import { auth } from "./firebase";
 import AdminReveal from "./pages/AdminReveal";
 import Navbar from "./components/Navbar";
@@ -84,7 +85,7 @@ function AppShell() {
     >
       {!isAdminRoute && <Stars />}
       {!isAdminRoute && <Navbar />}
-
+{!isAdminRoute && <LanguageToggle />}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/story" element={<Story />} />
@@ -109,8 +110,10 @@ function AppShell() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AppShell />
-    </BrowserRouter>
+    <LanguageProvider>
+      <BrowserRouter>
+        <AppShell />
+      </BrowserRouter>
+    </LanguageProvider>
   );
 }

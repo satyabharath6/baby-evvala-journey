@@ -1,31 +1,32 @@
-import { motion } from "framer-motion";
 import { useHomeLetter } from "../../hooks/useHomeLetter";
+import { useLanguage } from "../../i18n/LanguageContext";
 import "./HomeLetter.css";
 
 export default function HomeLetter() {
-  const { letter } = useHomeLetter();
+  const { letter, loading } = useHomeLetter();
+  const { language } = useLanguage();
 
+  if (loading) return null;
   if (!letter) return null;
 
+  const title = language === "te" ? letter.titleTe || letter.title : letter.title;
+  const body = language === "te" ? letter.bodyTe || letter.body : letter.body;
+  const signature =
+    language === "te" ? letter.signatureTe || letter.signature : letter.signature;
+
   return (
-    <motion.section
-      className="home-letter"
-      initial={{ opacity: 0, y: 40 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.7 }}
-    >
-      <div className="home-letter-card">
-        <h2>{letter.title}</h2>
+    <section className="section-shell home-letter-section">
+      <div className="elevated-card home-letter-card">
+        <p className="section-kicker">
+          {language === "te" ? "మా బేబీకి" : "For Our Baby"}
+        </p>
 
-        <div className="home-letter-body">
-          {letter.body.split("\n").map((line, index) => (
-            <p key={index}>{line}</p>
-          ))}
-        </div>
+        <h2 className="section-heading">{title}</h2>
 
-        <h3>{letter.signature}</h3>
+        <p className="home-letter-body">{body}</p>
+
+        <p className="home-letter-signature">{signature}</p>
       </div>
-    </motion.section>
+    </section>
   );
 }

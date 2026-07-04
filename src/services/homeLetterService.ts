@@ -3,25 +3,51 @@ import { db } from "../firebase";
 import type { HomeLetter } from "../types/homeLetter";
 
 export const defaultHomeLetter: HomeLetter = {
-  title: "❤️ A Letter to Our Family",
+  title: "A Letter to Our Little Miracle",
   body:
-    "Dear Family and Friends,\n\nThank you for being part of one of the most beautiful chapters of our lives.\n\nAs we wait to welcome Baby ఇవ్వల, our hearts are filled with excitement, gratitude, and hope. We created this little corner on the internet so that no moment would be forgotten.\n\nWhether you're joining us from nearby or from across the world, thank you for walking this journey with us. Your love means more than words can express.\n\nOne day, Baby ఇవ్వల will look back at these memories and know just how deeply they were loved even before they were born.",
-  signature: "Honey ❤️ Satya",
+    "From the moment we knew you were coming, our hearts changed forever. Every day, every prayer, every smile, and every dream has started to include you.",
+  signature: "With love, Amma & Nanna",
+
+  titleTe: "మా చిన్న అద్భుతానికి ఒక లేఖ",
+  bodyTe:
+    "నువ్వు మా జీవితంలోకి వస్తున్నావని తెలిసిన క్షణం నుంచి మా హృదయాలు మారిపోయాయి. ప్రతి రోజు, ప్రతి ప్రార్థన, ప్రతి చిరునవ్వు, ప్రతి కలలో ఇప్పుడు నువ్వు ఉన్నావు.",
+  signatureTe: "ప్రేమతో, అమ్మ & నాన్న",
 };
 
-export async function getHomeLetter() {
-  const snap = await getDoc(doc(db, "settings", "homeLetter"));
+function normalizeHomeLetter(data: Partial<HomeLetter>): HomeLetter {
+  return {
+    title: data.title || defaultHomeLetter.title,
+    body: data.body || defaultHomeLetter.body,
+    signature: data.signature || defaultHomeLetter.signature,
 
-  if (!snap.exists()) {
+    titleTe: data.titleTe || defaultHomeLetter.titleTe,
+    bodyTe: data.bodyTe || defaultHomeLetter.bodyTe,
+    signatureTe: data.signatureTe || defaultHomeLetter.signatureTe,
+
+    updatedAt: data.updatedAt,
+  };
+}
+
+export async function getHomeLetter(): Promise<HomeLetter> {
+  const ref = doc(db, "settings", "homeLetter");
+  const snapshot = await getDoc(ref);
+
+  if (!snapshot.exists()) {
     return defaultHomeLetter;
   }
 
-  return snap.data() as HomeLetter;
+  return normalizeHomeLetter(snapshot.data() as Partial<HomeLetter>);
 }
 
 export async function saveHomeLetter(letter: HomeLetter) {
-  await setDoc(doc(db, "settings", "homeLetter"), {
-    ...letter,
-    updatedAt: serverTimestamp(),
-  });
+  const ref = doc(db, "settings", "homeLetter");
+
+  await setDoc(
+    ref,
+    {
+      ...letter,
+      updatedAt: serverTimestamp(),
+    },
+    { merge: true }
+  );
 }

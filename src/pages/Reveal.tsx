@@ -3,12 +3,15 @@ import Countdown from "react-countdown";
 import Confetti from "react-confetti";
 import confetti from "canvas-confetti";
 import { useRevealSettings } from "../hooks/useRevealSettings";
+import { useLanguage } from "../i18n/LanguageContext";
 import "./RevealCinematic.css";
 
 type Stage = "countdown" | "suspense" | "celebration";
 
 export default function Reveal() {
   const { settings } = useRevealSettings();
+  const { t } = useLanguage();
+
   const [stage, setStage] = useState<Stage>("countdown");
   const [hasCelebrated, setHasCelebrated] = useState(false);
   const [windowSize, setWindowSize] = useState({
@@ -31,6 +34,9 @@ export default function Reveal() {
 
     if (Date.now() >= revealTime) {
       setStage("suspense");
+    } else {
+      setStage("countdown");
+      setHasCelebrated(false);
     }
   }, [settings]);
 
@@ -88,9 +94,9 @@ export default function Reveal() {
     return (
       <RevealShell
         icon="🎁"
-        eyebrow="Baby ఇవ్వల"
-        title="Reveal Coming Soon"
-        text="Our little miracle's special moment is almost here ❤️"
+        eyebrow={t.brand.babyNameTelugu}
+        title={t.reveal.comingSoon}
+        text={t.reveal.comingSoonText}
       />
     );
   }
@@ -119,18 +125,15 @@ export default function Reveal() {
           <div className="reveal-heartbeat" />
 
           <section className="final-reveal-open">
-            <p className="reveal-eyebrow">The wait is over</p>
+            <p className="reveal-eyebrow">{t.reveal.waitOver}</p>
 
             <div className="final-heart">{isBoy ? "💙" : "💖"}</div>
 
-            <h1>{isBoy ? "It’s a Boy!" : "It’s a Girl!"}</h1>
+            <h1>{isBoy ? t.reveal.boy : t.reveal.girl}</h1>
 
-            <h2>Welcome, Baby ఇవ్వల ❤️</h2>
+            <h2>{t.reveal.welcome}</h2>
 
-            <p>
-              Thank you for being part of this beautiful journey and celebrating
-              this precious moment with us.
-            </p>
+            <p>{t.reveal.thankYou}</p>
           </section>
         </main>
       </>
@@ -147,15 +150,15 @@ export default function Reveal() {
           <div className="reveal-moon" />
 
           <section className="reveal-cinematic-card">
-            <p className="reveal-eyebrow">🎉 Baby ఇవ్వల Reveal</p>
-            <h1>The big moment is almost here</h1>
-            <p>Soon, our family will share one beautiful moment together.</p>
+            <p className="reveal-eyebrow">{t.reveal.countdownEyebrow}</p>
+            <h1>{t.reveal.countdownTitle}</h1>
+            <p>{t.reveal.countdownText}</p>
 
             <div className="cinematic-countdown-grid">
-              <TimeCard value={days} label="Days" />
-              <TimeCard value={hours} label="Hours" />
-              <TimeCard value={minutes} label="Minutes" />
-              <TimeCard value={seconds} label="Seconds" />
+              <TimeCard value={days} label={t.reveal.days} />
+              <TimeCard value={hours} label={t.reveal.hours} />
+              <TimeCard value={minutes} label={t.reveal.minutes} />
+              <TimeCard value={seconds} label={t.reveal.seconds} />
             </div>
           </section>
         </main>
@@ -165,6 +168,8 @@ export default function Reveal() {
 }
 
 function RevealSuspense() {
+  const { t } = useLanguage();
+
   return (
     <main className="reveal-suspense">
       <div className="reveal-stars" />
@@ -172,10 +177,10 @@ function RevealSuspense() {
       <div className="suspense-heart">❤️</div>
 
       <div className="suspense-text">
-        <p>Every heartbeat...</p>
-        <p>Every prayer...</p>
-        <p>Every smile...</p>
-        <h1>has led to this moment.</h1>
+        <p>{t.reveal.suspense1}</p>
+        <p>{t.reveal.suspense2}</p>
+        <p>{t.reveal.suspense3}</p>
+        <h1>{t.reveal.suspenseFinal}</h1>
       </div>
     </main>
   );

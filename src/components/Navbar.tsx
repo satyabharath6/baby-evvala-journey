@@ -1,25 +1,45 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
-import { Menu, X, Home, Heart, Sparkles, Images, PartyPopper } from "lucide-react";
+import {
+  Menu,
+  X,
+  Home,
+  Heart,
+  Sparkles,
+  Images,
+  PartyPopper,
+} from "lucide-react";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const location = useLocation();
+  const { t, language } = useLanguage();
 
   const links = [
-    { name: "Home", path: "/", icon: <Home size={20} /> },
-    { name: "Story", path: "/story", icon: <Heart size={20} /> },
-    { name: "Prediction", path: "/prediction", icon: <Sparkles size={20} /> },
-    { name: "Blessings", path: "/blessings", icon: <Heart size={20} /> },
-    { name: "Gallery", path: "/gallery", icon: <Images size={20} /> },
-    { name: "Reveal", path: "/reveal", icon: <PartyPopper size={20} /> },
+    { name: t.nav.home, path: "/", icon: <Home size={20} /> },
+    { name: t.nav.story, path: "/story", icon: <Heart size={20} /> },
+    { name: t.nav.prediction, path: "/prediction", icon: <Sparkles size={20} /> },
+    { name: t.nav.blessings, path: "/blessings", icon: <Heart size={20} /> },
+    { name: t.nav.gallery, path: "/gallery", icon: <Images size={20} /> },
+    { name: t.nav.reveal, path: "/reveal", icon: <PartyPopper size={20} /> },
   ];
+
+  const drawerTagline =
+    language === "te"
+      ? "ప్రతి గుండె చప్పుడు ఆశతో మొదలవుతుంది."
+      : "Every heartbeat begins with hope.";
+
+  const drawerFooter =
+    language === "te"
+      ? "బేబీ ఇవ్వల కోసం ప్రేమతో తయారు చేయబడింది ❤️"
+      : "Made with ❤️ for Baby Evvala";
 
   return (
     <>
       <nav className="navbar">
         <Link to="/" className="logo">
-          👶 Baby Evvala
+          👶 {t.brand.babyName}
         </Link>
 
         <div className="desktop-links">
@@ -30,7 +50,12 @@ export default function Navbar() {
           ))}
         </div>
 
-        <button className="menu-btn" onClick={() => setOpen(true)}>
+        <button
+          className="menu-btn"
+          onClick={() => setOpen(true)}
+          aria-label="Open menu"
+          type="button"
+        >
           <Menu size={28} />
         </button>
       </nav>
@@ -42,11 +67,16 @@ export default function Navbar() {
           <aside className="drawer">
             <div className="drawer-top">
               <div>
-                <h2>👶 Baby Evvala</h2>
-                <p>Every heartbeat begins with hope.</p>
+                <h2>👶 {t.brand.babyName}</h2>
+                <p>{drawerTagline}</p>
               </div>
 
-              <button className="close-btn" onClick={() => setOpen(false)}>
+              <button
+                className="close-btn"
+                onClick={() => setOpen(false)}
+                aria-label="Close menu"
+                type="button"
+              >
                 <X size={26} />
               </button>
             </div>
@@ -69,9 +99,7 @@ export default function Navbar() {
               ))}
             </div>
 
-            <div className="drawer-footer">
-              Made with ❤️ for Baby Evvala
-            </div>
+            <div className="drawer-footer">{drawerFooter}</div>
           </aside>
         </>
       )}
