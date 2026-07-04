@@ -1,31 +1,37 @@
 import { Link } from "react-router-dom";
-import { useAdminStats } from "../hooks/useAdminStats";
 import CMSLayout from "../components/cms/CMSLayout";
+import { useAdminStats } from "../hooks/useAdminStats";
+
 export default function Admin() {
   const stats = useAdminStats();
 
   return (
-  <CMSLayout title="📊 Dashboard">
-    <div className="admin-stats-grid">
-      <StatCard label="Journey Memories" value={stats.journey} emoji="📖" />
-      <StatCard label="Gallery Photos" value={stats.gallery} emoji="📸" />
-      <StatCard label="Videos" value={stats.videos} emoji="🎥" />
-      <StatCard label="Blessings" value={stats.blessings} emoji="💌" />
-      <StatCard label="Predictions" value={stats.predictions} emoji="🔮" />
-    </div>
+    <CMSLayout title="📊 Dashboard">
+      <section className="dashboard-hero">
+        <h2>Welcome back, Satya 👋</h2>
+        <p>Here is the current status of Baby ఇవ్వల Journey.</p>
+      </section>
 
-    <h2 className="admin-section-title">Quick Actions</h2>
+      <div className="admin-stats-grid">
+        <StatCard label="Journey Memories" value={stats.journey} emoji="📖" />
+        <StatCard label="Gallery Photos" value={stats.gallery} emoji="📸" />
+        <StatCard label="Videos" value={stats.videos} emoji="🎥" />
+        <StatCard label="Blessings" value={stats.blessings} emoji="💌" />
+        <StatCard label="Predictions" value={stats.predictions} emoji="🔮" />
+      </div>
 
-    <div className="admin-grid">
-      <AdminCard emoji="📝" title="Home Letter" description="Edit the welcome letter" link="/admin/home-letter" />
-      <AdminCard emoji="📖" title="Journey" description="Add memories, photos, and videos" link="/admin/timeline" />
-      <AdminCard emoji="📸" title="Gallery" description="Upload and manage photos" link="/admin/gallery" />
-      <AdminCard emoji="🎉" title="Reveal" description="Manage reveal date and gender" link="/admin/reveal" />
-      <AdminCard emoji="🔮" title="Predictions" description="View family predictions" link="/admin/predictions" />
-      <AdminCard emoji="❤️" title="Blessings" description="View family blessings" link="/admin/blessings" />
-    </div>
-  </CMSLayout>
-);
+      <h2 className="admin-section-title">Quick Actions</h2>
+
+      <div className="admin-grid">
+        <AdminCard emoji="📝" title="Edit Letter" description="Update homepage welcome letter" link="/admin/home-letter" />
+        <AdminCard emoji="➕" title="Add Memory" description="Add journey photos or videos" link="/admin/timeline" />
+        <AdminCard emoji="📸" title="Upload Photo" description="Manage gallery memories" link="/admin/gallery" />
+        <AdminCard emoji="🎉" title="Reveal Settings" description="Control reveal date and gender" link="/admin/reveal" />
+        <AdminCard emoji="🔮" title="Predictions" description="View family guesses" link="/admin/predictions" />
+        <AdminCard emoji="❤️" title="Blessings" description="Read family blessings" link="/admin/blessings" />
+      </div>
+    </CMSLayout>
+  );
 }
 
 function StatCard({ emoji, label, value }: { emoji: string; label: string; value: number }) {

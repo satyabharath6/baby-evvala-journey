@@ -1590,3 +1590,22 @@ padding:28px;
   color: white;
   margin-bottom: 24px;
 }
+.dashboard-hero {
+  padding: 34px;
+  margin-bottom: 34px;
+  border-radius: 28px;
+  background:
+    radial-gradient(circle at top left, rgba(255, 95, 162, 0.18), transparent 40%),
+    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255,255,255,.15);
+}
+
+.dashboard-hero h2 {
+  font-size: clamp(2rem, 5vw, 3rem);
+  margin: 0 0 10px;
+}
+
+.dashboard-hero p {
+  color: #ddd;
+  margin: 0;
+}

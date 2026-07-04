@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import CMSLayout from "../components/cms/CMSLayout";
 import { db } from "../firebase";
 import {
   collection,
@@ -40,12 +41,12 @@ export default function AdminTimeline() {
     const q = query(collection(db, "timeline"), orderBy("createdAt", "desc"));
     const snapshot = await getDocs(q);
 
-    const data = snapshot.docs.map((d) => ({
-      id: d.id,
-      ...(d.data() as Omit<TimelineEvent, "id">),
-    }));
-
-    setEvents(data);
+    setEvents(
+      snapshot.docs.map((d) => ({
+        id: d.id,
+        ...(d.data() as Omit<TimelineEvent, "id">),
+      }))
+    );
   }
 
   useEffect(() => {
@@ -61,13 +62,7 @@ export default function AdminTimeline() {
     try {
       setSaving(true);
 
-      let mediaData:
-        | { url: string; storagePath: string; mediaType: MediaType }
-        | null = null;
-
-      if (file) {
-        mediaData = await uploadMedia(file, "timeline");
-      }
+      const mediaData = file ? await uploadMedia(file, "timeline") : null;
 
       await addDoc(collection(db, "timeline"), {
         emoji,
@@ -91,7 +86,6 @@ export default function AdminTimeline() {
       setFile(null);
 
       await loadEvents();
-
       alert("Journey memory saved ❤️");
     } catch (error) {
       console.error(error);
@@ -111,7 +105,6 @@ export default function AdminTimeline() {
 
       await deleteDoc(doc(db, "timeline", event.id));
       await loadEvents();
-
       alert("Memory deleted.");
     } catch (error) {
       console.error(error);
@@ -120,74 +113,78 @@ export default function AdminTimeline() {
   }
 
   return (
-    <main className="page admin-v2">
-      <div className="prediction-header">
-        <h1>🍼 Journey Memory Editor</h1>
-        <p>Create meaningful memories for Baby ఇవ్వల&apos;s journey.</p>
-      </div>
+    <CMSLayout title="📖 Journey">
+      <p style={{ color: "#ccc", marginBottom: 30 }}>
+        Create meaningful memories for Baby ఇవ్వల&apos;s journey.
+      </p>
 
       <div className="glass-card admin-form-card" style={{ marginBottom: 40 }}>
-  <div className="admin-form">
-        <label>Emoji</label>
-        <input
-          value={emoji}
-          onChange={(e) => setEmoji(e.target.value)}
-          placeholder="❤️ 🩺 👣 🎀"
-        />
+        <div className="admin-form">
+          <label>Emoji</label>
+          <input
+            value={emoji}
+            onChange={(e) => setEmoji(e.target.value)}
+            placeholder="❤️ 🩺 👣 🎀"
+          />
 
-        <label>Title</label>
-        <input
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="First Heartbeat"
-        />
+          <label>Title</label>
+          <input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="First Heartbeat"
+          />
 
-        <label>Date</label>
-        <input
-          type="date"
-          value={date}
-          onChange={(e) => setDate(e.target.value)}
-        />
+          <label>Date</label>
+          <input
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
+          />
 
-        <label>Location</label>
-        <input
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
-          placeholder="Atlanta, Georgia"
-        />
+          <label>Location</label>
+          <input
+            value={location}
+            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Atlanta, Georgia"
+          />
 
-        <label>Photo or Video</label>
-        <input
-          type="file"
-          accept="image/*,video/*"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
+          <label>Photo or Video</label>
+          <input
+            type="file"
+            accept="image/*,video/*"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+          />
 
-        <label>Story</label>
-        <textarea
-          rows={5}
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-          placeholder="Tell the story of this moment..."
-        />
+          <label>Story</label>
+          <textarea
+            rows={5}
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Tell the story of this moment..."
+          />
 
-        <label>Why This Moment Mattered</label>
-        <textarea
-          rows={4}
-          value={whyItMattered}
-          onChange={(e) => setWhyItMattered(e.target.value)}
-          placeholder="Why was this moment special?"
-        />
+          <label>Why This Moment Mattered</label>
+          <textarea
+            rows={4}
+            value={whyItMattered}
+            onChange={(e) => setWhyItMattered(e.target.value)}
+            placeholder="Why was this moment special?"
+          />
 
-        <button className="primary-btn" onClick={saveEvent} disabled={saving}>
-          {saving ? "Saving..." : "Save Memory ❤️"}
-        </button>
+          <button className="primary-btn" onClick={saveEvent} disabled={saving}>
+            {saving ? "Saving..." : "Save Memory ❤️"}
+          </button>
+        </div>
       </div>
-</div>
+
       <h2>Saved Journey Memories</h2>
 
       {events.map((event) => (
-        <div key={event.id} className="glass-card" style={{ padding: 25, marginBottom: 20 }}>
+        <div
+          key={event.id}
+          className="glass-card"
+          style={{ padding: 25, marginBottom: 20 }}
+        >
           {event.mediaUrl && event.mediaType === "image" && (
             <img
               src={event.mediaUrl}
@@ -247,6 +244,6 @@ export default function AdminTimeline() {
           </button>
         </div>
       ))}
-    </main>
+    </CMSLayout>
   );
 }
