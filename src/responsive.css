@@ -1609,3 +1609,109 @@ padding:28px;
   color: #ddd;
   margin: 0;
 }
+.hero-telugu .hero-v2-title {
+  font-size: clamp(3.4rem, 6.5vw, 6.2rem);
+  line-height: 1.12;
+  letter-spacing: -1px;
+}
+
+.hero-telugu .hero-v2-telugu {
+  font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+  line-height: 1.35;
+}
+
+.hero-telugu .hero-v2-subtitle {
+  font-size: clamp(1rem, 1.8vw, 1.35rem);
+  line-height: 1.8;
+}
+
+@media (max-width: 700px) {
+  .hero-telugu .hero-v2-title {
+    font-size: clamp(2.1rem, 9vw, 3.1rem);
+    line-height: 1.22;
+  }
+
+  .hero-telugu .hero-v2-telugu {
+    font-size: clamp(1.25rem, 5.5vw, 1.8rem);
+    line-height: 1.45;
+  }
+
+  .hero-telugu .hero-v2-subtitle {
+    font-size: 1rem;
+    line-height: 1.8;
+  }
+}
+@media (max-width: 700px) {
+  .hero-v2 {
+    padding-top: 120px !important;
+    align-items: flex-start;
+  }
+
+  .hero-v2-content {
+    margin-top: 24px;
+    position: relative;
+    z-index: 5;
+  }
+
+  .hero-v2 .hero-eyebrow {
+    display: block;
+    position: relative;
+    z-index: 6;
+    margin-top: 8px;
+    margin-bottom: 18px;
+  }
+}
+@media (min-width: 701px) {
+  .hero-telugu .hero-v2-content {
+    max-width: 820px;
+    padding: 58px 64px;
+  }
+
+  .hero-telugu .hero-v2-title {
+    font-size: clamp(3.2rem, 4.7vw, 5.1rem) !important;
+    line-height: 1.16 !important;
+    letter-spacing: -0.5px;
+    max-width: 760px;
+  }
+
+  .hero-telugu .hero-v2-telugu {
+    font-size: clamp(1.5rem, 2.3vw, 2.35rem) !important;
+    line-height: 1.4 !important;
+    max-width: 720px;
+  }
+
+  .hero-telugu .hero-v2-subtitle {
+    font-size: clamp(1rem, 1.35vw, 1.25rem) !important;
+    line-height: 1.85;
+    max-width: 720px;
+  }
+}
+@media (max-width: 700px) {
+  .hero-v2 {
+    padding-top: calc(150px + env(safe-area-inset-top)) !important;
+    min-height: auto !important;
+    align-items: flex-start !important;
+  }
+
+  .hero-v2-content {
+    margin-top: 42px !important;
+    padding-top: 42px !important;
+    position: relative !important;
+    z-index: 20 !important;
+    overflow: visible !important;
+  }
+
+  .hero-v2 .hero-eyebrow {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 30 !important;
+    margin-top: 0 !important;
+    margin-bottom: 22px !important;
+  }
+
+  .language-toggle {
+    top: 92px !important;
+  }
+}

@@ -2,8 +2,11 @@ import { useState } from "react";
 import "../App.css";
 import { db } from "../firebase";
 import { collection, addDoc } from "firebase/firestore";
+import { useLanguage } from "../i18n/LanguageContext";
 
 export default function Prediction() {
+  const { t } = useLanguage();
+
   const [gender, setGender] = useState("");
   const [name, setName] = useState("");
   const [relationship, setRelationship] = useState("");
@@ -15,7 +18,7 @@ export default function Prediction() {
 
   const handleSubmit = async () => {
     if (!name || !gender) {
-      alert("Please fill your name and prediction.");
+      alert(t.prediction.requiredAlert);
       return;
     }
 
@@ -41,21 +44,21 @@ export default function Prediction() {
       setMessage("");
     } catch (error) {
       console.error(error);
-      alert("Something went wrong.");
+      alert(t.prediction.errorAlert);
     }
   };
 
   return (
     <main className="page prediction-v2">
       <div className="prediction-header">
-        <h1>🔮 Baby Prediction</h1>
-        <p>What does your heart say?</p>
+        <h1>{t.prediction.title}</h1>
+        <p>{t.prediction.subtitle}</p>
       </div>
 
       <div className="prediction-card glass-card">
-        <h2>👶 Make Your Prediction</h2>
+        <h2>{t.prediction.cardTitle}</h2>
 
-        <label>Boy or Girl?</label>
+        <label>{t.prediction.genderLabel}</label>
         <div className="gender-buttons-v2">
           <button
             type="button"
@@ -63,7 +66,7 @@ export default function Prediction() {
             onClick={() => setGender("Boy")}
           >
             <span>👦</span>
-            Boy
+            {t.prediction.boy}
           </button>
 
           <button
@@ -72,43 +75,43 @@ export default function Prediction() {
             onClick={() => setGender("Girl")}
           >
             <span>👧</span>
-            Girl
+            {t.prediction.girl}
           </button>
         </div>
 
         <div className="form-grid">
           <div>
-            <label>Your Name</label>
+            <label>{t.prediction.nameLabel}</label>
             <input
               type="text"
-              placeholder="Your name"
+              placeholder={t.prediction.namePlaceholder}
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
           </div>
 
           <div>
-            <label>Relationship</label>
+            <label>{t.prediction.relationshipLabel}</label>
             <input
               type="text"
-              placeholder="Uncle, Aunt, Friend..."
+              placeholder={t.prediction.relationshipPlaceholder}
               value={relationship}
               onChange={(e) => setRelationship(e.target.value)}
             />
           </div>
 
           <div>
-            <label>Village / City</label>
+            <label>{t.prediction.cityLabel}</label>
             <input
               type="text"
-              placeholder="Village or City"
+              placeholder={t.prediction.cityPlaceholder}
               value={city}
               onChange={(e) => setCity(e.target.value)}
             />
           </div>
 
           <div>
-            <label>Expected Birth Date</label>
+            <label>{t.prediction.birthDateLabel}</label>
             <input
               type="date"
               value={birthDate}
@@ -117,37 +120,37 @@ export default function Prediction() {
           </div>
         </div>
 
-        <label>Name Suggestion</label>
+        <label>{t.prediction.babyNameLabel}</label>
         <input
           type="text"
-          placeholder="Baby Name Suggestion"
+          placeholder={t.prediction.babyNamePlaceholder}
           value={babyName}
           onChange={(e) => setBabyName(e.target.value)}
         />
 
-        <label>Message for Baby</label>
+        <label>{t.prediction.messageLabel}</label>
         <textarea
           rows={4}
-          placeholder="Write your blessing..."
+          placeholder={t.prediction.messagePlaceholder}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
         />
 
         <button type="button" className="primary-btn" onClick={handleSubmit}>
-          Submit Prediction ❤️
+          {t.prediction.submitButton}
         </button>
       </div>
 
       {submitted && (
         <div className="success-box">
-          <h2>🎉 Thank You!</h2>
-          <p>Your prediction has been saved for Baby Evvala ❤️</p>
+          <h2>{t.prediction.thankYouTitle}</h2>
+          <p>{t.prediction.thankYouText}</p>
           <button
             type="button"
             className="primary-btn"
             onClick={() => setSubmitted(false)}
           >
-            Close
+            {t.prediction.closeButton}
           </button>
         </div>
       )}

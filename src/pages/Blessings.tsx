@@ -9,6 +9,7 @@ import {
   query,
   serverTimestamp,
 } from "firebase/firestore";
+import { useLanguage } from "../i18n/LanguageContext";
 
 interface Blessing {
   id?: string;
@@ -18,6 +19,8 @@ interface Blessing {
 }
 
 export default function Blessings() {
+  const { t } = useLanguage();
+
   const [name, setName] = useState("");
   const [city, setCity] = useState("");
   const [message, setMessage] = useState("");
@@ -27,6 +30,7 @@ export default function Blessings() {
   async function loadBlessings() {
     const q = query(collection(db, "blessings"), orderBy("submittedAt", "desc"));
     const snapshot = await getDocs(q);
+
     const data = snapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -41,7 +45,7 @@ export default function Blessings() {
 
   async function handleSubmit() {
     if (!name || !city || !message) {
-      alert("Please complete all fields.");
+      alert(t.blessings.requiredAlert);
       return;
     }
 
@@ -62,61 +66,70 @@ export default function Blessings() {
   return (
     <main className="page blessings-v2">
       <div className="prediction-header">
-        <h1>❤️ Blessings</h1>
-        <p>Leave a blessing for Baby Evvala</p>
+        <h1>{t.blessings.title}</h1>
+        <p>{t.blessings.subtitle}</p>
       </div>
 
       <div className="glass-card blessing-form">
-        <label>Your Name</label>
+        <label>{t.blessings.nameLabel}</label>
         <input
           value={name}
           onChange={(e) => setName(e.target.value)}
-          placeholder="Your name"
+          placeholder={t.blessings.namePlaceholder}
         />
 
-        <label>Village / City</label>
+        <label>{t.blessings.cityLabel}</label>
         <input
           value={city}
           onChange={(e) => setCity(e.target.value)}
-          placeholder="Village or City"
+          placeholder={t.blessings.cityPlaceholder}
         />
 
-        <label>Your Blessing</label>
+        <label>{t.blessings.messageLabel}</label>
         <textarea
           rows={5}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          placeholder="Write your blessing..."
+          placeholder={t.blessings.messagePlaceholder}
         />
 
         <button className="primary-btn" onClick={handleSubmit}>
-          Submit Blessing ❤️
+          {t.blessings.submitButton}
         </button>
       </div>
 
       {submitted && (
         <div className="success-box">
-          <h2>🎉 Thank You!</h2>
-          <p>Your blessing has been saved ❤️</p>
+          <h2>{t.blessings.thankYouTitle}</h2>
+          <p>{t.blessings.thankYouText}</p>
           <button className="primary-btn" onClick={() => setSubmitted(false)}>
-            Close
+            {t.blessings.closeButton}
           </button>
         </div>
       )}
 
       <section className="blessings-wall">
-        <h2>💖 Family Blessings</h2>
+        <h2>{t.blessings.wallTitle}</h2>
 
-        <div className="blessing-grid">
-          {blessings.map((b) => (
-            <article key={b.id} className="blessing-card">
-              <div className="blessing-avatar">💌</div>
-              <h3>{b.name}</h3>
-              <p className="blessing-city">📍 {b.city}</p>
-              <p className="blessing-message">{b.message}</p>
-            </article>
-          ))}
-        </div>
+        {blessings.length === 0 ? (
+          <div className="glass-card" style={{ padding: 32, textAlign: "center" }}>
+            <h3>{t.blessings.emptyTitle}</h3>
+            <p style={{ color: "#ddd", lineHeight: 1.7 }}>
+              {t.blessings.emptyText}
+            </p>
+          </div>
+        ) : (
+          <div className="blessing-grid">
+            {blessings.map((b) => (
+              <article key={b.id} className="blessing-card">
+                <div className="blessing-avatar">💌</div>
+                <h3>{b.name}</h3>
+                <p className="blessing-city">📍 {b.city}</p>
+                <p className="blessing-message">{b.message}</p>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
     </main>
   );

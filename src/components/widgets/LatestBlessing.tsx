@@ -1,10 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useRandomBlessing } from "../../hooks/useRandomBlessing";
+import { useLanguage } from "../../i18n/LanguageContext";
 import "./LatestBlessing.css";
 
 export default function LatestBlessing() {
   const { randomBlessing, totalBlessings } = useRandomBlessing();
+  const { t } = useLanguage();
 
   if (!randomBlessing) return null;
 
@@ -16,9 +18,9 @@ export default function LatestBlessing() {
       viewport={{ once: true }}
       transition={{ duration: 0.7 }}
     >
-      <p className="latest-blessing-label">💌 LOVE FROM FAMILY</p>
+      <p className="latest-blessing-label">{t.home.latestBlessingLabel}</p>
 
-      <h2>A blessing from the heart</h2>
+      <h2>{t.home.latestBlessingTitle}</h2>
 
       <blockquote>“{randomBlessing.message}”</blockquote>
 
@@ -28,11 +30,12 @@ export default function LatestBlessing() {
       </p>
 
       <p className="latest-blessing-count">
-        Showing one of {totalBlessings} blessings
+        {t.home.latestBlessingCountStart} {totalBlessings}{" "}
+        {t.home.latestBlessingCountEnd}
       </p>
 
       <Link to="/blessings" className="hero-v2-button">
-        Read All Blessings ❤️
+        {t.home.latestBlessingButton}
       </Link>
     </motion.section>
   );

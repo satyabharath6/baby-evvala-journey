@@ -1,9 +1,12 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useLatestTimelineEvent } from "../../hooks/useLatestTimelineEvent";
+import { useLanguage } from "../../i18n/LanguageContext";
 import "./LatestJourney.css";
+
 export default function LatestJourney() {
   const { event } = useLatestTimelineEvent();
+  const { t } = useLanguage();
 
   if (!event) return null;
 
@@ -18,13 +21,13 @@ export default function LatestJourney() {
       <div className="latest-journey-icon">{event.emoji}</div>
 
       <div>
-        <p className="latest-label">LATEST MILESTONE</p>
+        <p className="latest-label">{t.home.latestJourneyLabel}</p>
         <h2>{event.title}</h2>
         <p className="latest-date">{event.date}</p>
         <p className="latest-description">{event.description}</p>
 
         <Link to="/story" className="hero-v2-button">
-          View Full Journey ❤️
+          {t.home.latestJourneyButton}
         </Link>
       </div>
     </motion.section>

@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { useGallery } from "../../hooks/useGallery";
+import { useLanguage } from "../../i18n/LanguageContext";
 import "./LatestGallery.css";
 
 export default function LatestGallery() {
   const { photos } = useGallery();
+  const { t } = useLanguage();
+
   const latestPhotos = photos.slice(0, 3);
 
   if (latestPhotos.length === 0) return null;
@@ -18,21 +21,24 @@ export default function LatestGallery() {
       transition={{ duration: 0.7 }}
     >
       <div className="latest-gallery-header">
-        <p>📸 LATEST MEMORIES</p>
-        <h2>Beautiful moments we treasure</h2>
+        <p>{t.home.latestGalleryLabel}</p>
+        <h2>{t.home.latestGalleryTitle}</h2>
       </div>
 
       <div className="latest-gallery-grid">
         {latestPhotos.map((photo) => (
           <article key={photo.id} className="latest-gallery-card">
-            <img src={photo.imageUrl} alt={photo.caption || "Baby Evvala memory"} />
-            <h3>{photo.caption || "Baby Evvala Memory"}</h3>
+            <img
+              src={photo.imageUrl}
+              alt={photo.caption || t.home.latestGalleryFallbackAlt}
+            />
+            <h3>{photo.caption || t.home.latestGalleryFallbackTitle}</h3>
           </article>
         ))}
       </div>
 
       <Link to="/gallery" className="hero-v2-button">
-        View Full Gallery ❤️
+        {t.home.latestGalleryButton}
       </Link>
     </motion.section>
   );
