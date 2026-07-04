@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import CMSLayout from "../components/cms/CMSLayout";
 import { getHomeLetter, saveHomeLetter } from "../services/homeLetterService";
 
 export default function AdminHomeLetter() {
@@ -34,12 +35,7 @@ export default function AdminHomeLetter() {
   }
 
   return (
-    <main className="page admin-v2">
-      <div className="prediction-header">
-        <h1>📝 Home Letter Editor</h1>
-        <p>Edit the welcome letter shown on the homepage.</p>
-      </div>
-
+    <CMSLayout title="📝 Home Letter">
       <div className="glass-card admin-form-card">
         <div className="admin-form">
           <label>Title</label>
@@ -63,6 +59,6 @@ export default function AdminHomeLetter() {
           </button>
         </div>
       </div>
-    </main>
+    </CMSLayout>
   );
 }

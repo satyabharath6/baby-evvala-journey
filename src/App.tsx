@@ -1,5 +1,11 @@
 import { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  useLocation,
+} from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
 import type { User } from "firebase/auth";
 
@@ -62,94 +68,49 @@ function ProtectedAdmin({ children }: { children: React.ReactNode }) {
 
   return <>{children}</>;
 }
+function AppShell() {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith("/admin");
+
+  return (
+    <div
+      style={{
+        minHeight: "100vh",
+        background:
+          "radial-gradient(circle at top,#3b1d5c,#10172e,#050816)",
+        overflow: "hidden",
+        position: "relative",
+      }}
+    >
+      {!isAdminRoute && <Stars />}
+      {!isAdminRoute && <Navbar />}
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/story" element={<Story />} />
+        <Route path="/prediction" element={<Prediction />} />
+        <Route path="/blessings" element={<Blessings />} />
+        <Route path="/gallery" element={<Gallery />} />
+        <Route path="/reveal" element={<Reveal />} />
+
+        <Route path="/admin/login" element={<AdminLogin />} />
+
+        <Route path="/admin" element={<ProtectedAdmin><Admin /></ProtectedAdmin>} />
+        <Route path="/admin/home-letter" element={<ProtectedAdmin><AdminHomeLetter /></ProtectedAdmin>} />
+        <Route path="/admin/reveal" element={<ProtectedAdmin><AdminReveal /></ProtectedAdmin>} />
+        <Route path="/admin/predictions" element={<ProtectedAdmin><AdminPredictions /></ProtectedAdmin>} />
+        <Route path="/admin/gallery" element={<ProtectedAdmin><AdminGallery /></ProtectedAdmin>} />
+        <Route path="/admin/timeline" element={<ProtectedAdmin><AdminTimeline /></ProtectedAdmin>} />
+        <Route path="/admin/blessings" element={<ProtectedAdmin><AdminBlessings /></ProtectedAdmin>} />
+      </Routes>
+    </div>
+  );
+}
 
 export default function App() {
   return (
     <BrowserRouter>
-      <div
-        style={{
-          minHeight: "100vh",
-          background:
-            "radial-gradient(circle at top,#3b1d5c,#10172e,#050816)",
-          overflow: "hidden",
-          position: "relative",
-        }}
-      >
-        <Stars />
-        <Navbar />
-
-        <Routes>
-          <Route path="/" element={<Home />} />
-          
-          <Route path="/story" element={<Story />} />
-          <Route path="/prediction" element={<Prediction />} />
-          <Route path="/blessings" element={<Blessings />} />
-          <Route path="/gallery" element={<Gallery />} />
-          <Route path="/reveal" element={<Reveal />} />
-
-          <Route path="/admin/login" element={<AdminLogin />} />
-          <Route
-  path="/admin/home-letter"
-  element={
-    <ProtectedAdmin>
-      <AdminHomeLetter />
-    </ProtectedAdmin>
-  }
-/>
-<Route
-  path="/admin/reveal"
-  element={
-    <ProtectedAdmin>
-      <AdminReveal />
-    </ProtectedAdmin>
-  }
-/>
-          <Route
-            path="/admin"
-            element={
-              <ProtectedAdmin>
-                <Admin />
-              </ProtectedAdmin>
-            }
-          />
-
-          <Route
-            path="/admin/predictions"
-            element={
-              <ProtectedAdmin>
-                <AdminPredictions />
-              </ProtectedAdmin>
-            }
-          />
-
-          <Route
-            path="/admin/gallery"
-            element={
-              <ProtectedAdmin>
-                <AdminGallery />
-              </ProtectedAdmin>
-            }
-          />
-
-          <Route
-            path="/admin/timeline"
-            element={
-              <ProtectedAdmin>
-                <AdminTimeline />
-              </ProtectedAdmin>
-            }
-          />
-
-          <Route
-            path="/admin/blessings"
-            element={
-              <ProtectedAdmin>
-                <AdminBlessings />
-              </ProtectedAdmin>
-            }
-          />
-        </Routes>
-      </div>
+      <AppShell />
     </BrowserRouter>
   );
 }

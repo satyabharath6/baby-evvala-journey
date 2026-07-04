@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { db, storage } from "../firebase";
+import CMSLayout from "../components/cms/CMSLayout";
 import {
   addDoc,
   collection,
@@ -46,7 +47,7 @@ export default function AdminGallery() {
     loadPhotos();
   }, []);
 
-  const uploadPhoto = async () => {
+  async function uploadPhoto() {
     if (!file) {
       alert("Please choose a photo.");
       return;
@@ -59,7 +60,6 @@ export default function AdminGallery() {
       const fileRef = ref(storage, storagePath);
 
       await uploadBytes(fileRef, file);
-
       const imageUrl = await getDownloadURL(fileRef);
 
       await addDoc(collection(db, "gallery"), {
@@ -80,9 +80,9 @@ export default function AdminGallery() {
     } finally {
       setUploading(false);
     }
-  };
+  }
 
-  const deletePhoto = async (photo: GalleryPhoto) => {
+  async function deletePhoto(photo: GalleryPhoto) {
     if (!window.confirm("Delete this photo?")) return;
 
     try {
@@ -98,53 +98,38 @@ export default function AdminGallery() {
       console.error(error);
       alert("Delete failed.");
     }
-  };
+  }
 
   return (
-    <main
-      style={{
-        maxWidth: 1000,
-        margin: "120px auto",
-        padding: 20,
-        color: "white",
-      }}
-    >
-      <h1 style={{ fontSize: "3rem" }}>📸 Gallery Manager</h1>
-
+    <CMSLayout title="📸 Gallery">
       <p style={{ color: "#ccc", marginBottom: 30 }}>
         Upload and manage Baby Evvala gallery photos.
       </p>
 
-      <div
-        style={{
-          background: "rgba(255,255,255,.08)",
-          borderRadius: 24,
-          padding: 30,
-          border: "1px solid rgba(255,255,255,.15)",
-          marginBottom: 40,
-        }}
-      >
-        <label>Choose Photo</label>
-        <input
-          type="file"
-          accept="image/*"
-          onChange={(e) => setFile(e.target.files?.[0] || null)}
-        />
+      <div className="glass-card admin-form-card" style={{ marginBottom: 40 }}>
+        <div className="admin-form">
+          <label>Choose Photo</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setFile(e.target.files?.[0] || null)}
+          />
 
-        <label style={{ marginTop: 20 }}>Caption</label>
-        <input
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          placeholder="20 week ultrasound, family photo, etc."
-        />
+          <label>Caption</label>
+          <input
+            value={caption}
+            onChange={(e) => setCaption(e.target.value)}
+            placeholder="20 week ultrasound, family photo, etc."
+          />
 
-        <button
-          className="submit-btn"
-          onClick={uploadPhoto}
-          disabled={uploading}
-        >
-          {uploading ? "Uploading..." : "Upload Photo ❤️"}
-        </button>
+          <button
+            className="primary-btn"
+            onClick={uploadPhoto}
+            disabled={uploading}
+          >
+            {uploading ? "Uploading..." : "Upload Photo ❤️"}
+          </button>
+        </div>
       </div>
 
       <h2>Uploaded Photos</h2>
@@ -157,15 +142,7 @@ export default function AdminGallery() {
         }}
       >
         {photos.map((photo) => (
-          <div
-            key={photo.id}
-            style={{
-              background: "rgba(255,255,255,.08)",
-              borderRadius: 20,
-              overflow: "hidden",
-              border: "1px solid rgba(255,255,255,.15)",
-            }}
-          >
+          <div key={photo.id} className="glass-card" style={{ overflow: "hidden" }}>
             <img
               src={photo.imageUrl}
               alt={photo.caption}
@@ -198,6 +175,6 @@ export default function AdminGallery() {
           </div>
         ))}
       </div>
-    </main>
+    </CMSLayout>
   );
 }
