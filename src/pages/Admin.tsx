@@ -34,6 +34,62 @@ export default function Admin() {
         <StatCard label="Predictions" value={stats.predictions} emoji="🔮" />
       </div>
 
+      <h2 className="admin-section-title">Recent Activity</h2>
+
+      <div className="admin-grid">
+        <ActivityCard
+          emoji="📖"
+          title="Latest Journey Memory"
+          main={stats.latestJourney?.title || "No journey memory yet"}
+          detail={stats.latestJourney?.date || "Add the first milestone"}
+          link="/admin/timeline"
+        />
+
+        <ActivityCard
+          emoji="📸"
+          title="Latest Gallery Photo"
+          main={stats.latestGallery?.caption || "No gallery photo yet"}
+          detail="Manage gallery memories"
+          link="/admin/gallery"
+        />
+
+        <ActivityCard
+          emoji="💌"
+          title="Latest Blessing"
+          main={stats.latestBlessing?.name || "No blessing yet"}
+          detail={stats.latestBlessing?.message || "Family blessings will appear here"}
+          link="/admin/blessings"
+        />
+
+        <ActivityCard
+          emoji="🔮"
+          title="Latest Prediction"
+          main={
+            stats.latestPrediction?.name
+              ? `${stats.latestPrediction.name} guessed ${stats.latestPrediction.gender || "—"}`
+              : "No prediction yet"
+          }
+          detail={
+            stats.latestPrediction?.babyName
+              ? `Name idea: ${stats.latestPrediction.babyName}`
+              : "Family guesses will appear here"
+          }
+          link="/admin/predictions"
+        />
+
+        <ActivityCard
+          emoji="🎉"
+          title="Reveal Status"
+          main={stats.reveal?.enabled ? "Reveal is active" : "Reveal is disabled"}
+          detail={
+            stats.reveal?.revealDate
+              ? `${stats.reveal.gender === "boy" ? "Boy 💙" : "Girl 💖"} • ${stats.reveal.revealDate}`
+              : "No reveal date set"
+          }
+          link="/admin/reveal"
+        />
+      </div>
+
       <h2 className="admin-section-title">Quick Actions</h2>
 
       <div className="admin-grid">
@@ -93,6 +149,34 @@ function StatCard({
       <h2>{value}</h2>
       <p>{label}</p>
     </div>
+  );
+}
+
+function ActivityCard({
+  emoji,
+  title,
+  main,
+  detail,
+  link,
+}: {
+  emoji: string;
+  title: string;
+  main: string;
+  detail: string;
+  link: string;
+}) {
+  return (
+    <Link to={link}>
+      <div className="admin-card">
+        <div className="admin-icon">{emoji}</div>
+        <p style={{ color: "#f7d774", fontWeight: 800, marginBottom: 8 }}>
+          {title}
+        </p>
+        <h2>{main}</h2>
+        <p>{detail}</p>
+        <button className="primary-btn">Open</button>
+      </div>
+    </Link>
   );
 }
 
