@@ -1,0 +1,40 @@
+.section-shell {
+  width: var(--page-width);
+  max-width: var(--page-max);
+  margin: var(--space-7) auto;
+}
+
+.section-kicker {
+  color: #ffd6f3;
+  letter-spacing: 2px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.section-heading {
+  color: var(--color-white);
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  text-align: center;
+  margin: var(--space-2) 0 var(--space-4);
+}
+
+.elevated-card {
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--radius-xl);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow-soft);
+}
+
+.soft-text {
+  color: var(--color-soft-white);
+  line-height: 1.8;
+}
+
+.gold-text {
+  color: var(--color-warm-gold);
+}
+
+.pink-text {
+  color: #ffd6f3;
+}
