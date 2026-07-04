@@ -22,32 +22,36 @@ export default function Reveal() {
   useEffect(() => {
     async function loadReveal() {
       const snap = await getDoc(doc(db, "settings", "reveal"));
-      if (snap.exists()) setSettings(snap.data() as RevealSettings);
+
+      if (snap.exists()) {
+        setSettings(snap.data() as RevealSettings);
+      }
     }
 
     loadReveal();
 
-    const resize = () =>
+    const resize = () => {
       setWindowSize({
         width: window.innerWidth,
         height: window.innerHeight,
       });
+    };
 
     window.addEventListener("resize", resize);
     return () => window.removeEventListener("resize", resize);
   }, []);
 
-  function fireCelebration() {
+  function fireCelebration(gender: "boy" | "girl") {
     if (hasCelebrated) return;
 
     setHasCelebrated(true);
 
     const colors =
-      settings?.gender === "boy"
+      gender === "boy"
         ? ["#4dabf7", "#74c0fc", "#ffffff"]
         : ["#ff4da6", "#ff85c1", "#ffffff"];
 
-    const duration = 5000;
+    const duration = 6000;
     const end = Date.now() + duration;
 
     const interval = window.setInterval(() => {
@@ -57,19 +61,26 @@ export default function Reveal() {
       }
 
       confetti({
-        particleCount: 80,
-        spread: 90,
+        particleCount: 90,
+        spread: 100,
         startVelocity: 55,
-        origin: { x: Math.random(), y: Math.random() * 0.45 },
+        origin: {
+          x: Math.random(),
+          y: Math.random() * 0.45,
+        },
         colors,
       });
-    }, 350);
+    }, 320);
   }
 
   if (!settings) {
     return (
       <main className="page reveal-page">
-        <h2>Loading...</h2>
+        <div className="reveal-card">
+          <div className="reveal-icon">✨</div>
+          <h1>Loading...</h1>
+          <p>Preparing Baby Evvala&apos;s special moment.</p>
+        </div>
       </main>
     );
   }
@@ -79,8 +90,9 @@ export default function Reveal() {
       <main className="page reveal-page">
         <div className="reveal-card">
           <div className="reveal-icon">🎁</div>
+          <p className="reveal-eyebrow">Baby Evvala</p>
           <h1>Reveal Coming Soon</h1>
-          <p>Baby Evvala&apos;s special moment is almost here ❤️</p>
+          <p>Our little miracle&apos;s special moment is almost here ❤️</p>
         </div>
       </main>
     );
@@ -98,9 +110,14 @@ export default function Reveal() {
               <div className="reveal-card">
                 <div className="reveal-icon">🎉</div>
 
+                <p className="reveal-eyebrow">Baby Evvala</p>
+
                 <h1>Gender Reveal</h1>
 
-                <p>Countdown to Baby Evvala&apos;s big reveal</p>
+                <p>
+                  The countdown has begun. Soon, our family will know the little
+                  heart growing with love.
+                </p>
 
                 <div className="countdown-grid">
                   <TimeCard value={days} label="Days" />
@@ -113,7 +130,9 @@ export default function Reveal() {
           );
         }
 
-        fireCelebration();
+        fireCelebration(settings.gender);
+
+        const isBoy = settings.gender === "boy";
 
         return (
           <>
@@ -121,31 +140,28 @@ export default function Reveal() {
               width={windowSize.width}
               height={windowSize.height}
               recycle
-              numberOfPieces={400}
+              numberOfPieces={420}
             />
 
             <main className="page reveal-page">
               <div
                 className={
-                  settings.gender === "boy"
+                  isBoy
                     ? "reveal-card final-reveal boy-reveal"
                     : "reveal-card final-reveal girl-reveal"
                 }
               >
-                <div className="final-heart">
-                  {settings.gender === "boy" ? "💙" : "💖"}
-                </div>
+                <div className="final-heart">{isBoy ? "💙" : "💖"}</div>
 
-                <h1>
-                  {settings.gender === "boy"
-                    ? "IT'S A BOY!"
-                    : "IT'S A GIRL!"}
-                </h1>
+                <p className="reveal-eyebrow">The wait is over</p>
 
-                <p>Welcome Baby Evvala ❤️</p>
+                <h1>{isBoy ? "It’s a Boy!" : "It’s a Girl!"}</h1>
+
+                <p className="final-subtitle">Welcome, Baby Evvala ❤️</p>
 
                 <p className="reveal-thanks">
-                  Thank you for celebrating this beautiful journey with us.
+                  Thank you for being part of this beautiful journey and
+                  celebrating this precious moment with us.
                 </p>
               </div>
             </main>
@@ -159,7 +175,7 @@ export default function Reveal() {
 function TimeCard({ value, label }: { value: number; label: string }) {
   return (
     <div className="time-card">
-      <div>{value}</div>
+      <div>{String(value).padStart(2, "0")}</div>
       <span>{label}</span>
     </div>
   );

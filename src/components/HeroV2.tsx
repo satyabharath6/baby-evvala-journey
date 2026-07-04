@@ -8,7 +8,6 @@ export default function HeroV2() {
   return (
     <>
       <section className="hero-v2 page">
-
         <FloatingOrbs />
         <GlowingMoon />
         <StarsBackground />
@@ -20,9 +19,7 @@ export default function HeroV2() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.9 }}
         >
-          <p className="hero-eyebrow">
-            ✨ Baby Evvala Journey ✨
-          </p>
+          <p className="hero-eyebrow">✨ Baby Evvala Journey ✨</p>
 
           <h1 className="hero-v2-title">
             Every heartbeat
@@ -37,90 +34,74 @@ export default function HeroV2() {
           </p>
 
           <p className="hero-v2-subtitle">
-            A little miracle,
-            a growing family,
-            and a story filled with love.
-          </p>
-
-          <Link
-            to="/story"
-            className="hero-v2-button"
-          >
-            Begin Journey ❤️
-          </Link>
-        </motion.div>
-
-      </section>
-
-      {/* ---------- Journey Preview ---------- */}
-
-      <section className="landing-preview page">
-
-        <motion.div
-          whileInView={{ opacity: 1, y: 0 }}
-          initial={{ opacity: 0, y: 40 }}
-          viewport={{ once: true }}
-          className="preview-card"
-        >
-          <div className="preview-icon">❤️</div>
-
-          <h2>Our Journey</h2>
-
-          <p>
-            Follow every milestone from our wedding
-            to Baby Evvala's arrival.
+            A little miracle, a growing family, and a story filled with love.
           </p>
 
           <Link to="/story" className="hero-v2-button">
+            Begin Journey ❤️
+          </Link>
+        </motion.div>
+      </section>
+
+      <section className="landing-intro page">
+        <p className="hero-eyebrow">A Family Celebration</p>
+
+        <h2>
+          One tiny heartbeat.
+          <br />
+          So many hearts waiting with love.
+        </h2>
+
+        <p>
+          Explore our journey, memories, blessings, and the special reveal
+          moment we are excited to share with everyone.
+        </p>
+      </section>
+
+      <section className="landing-preview page">
+        <motion.div
+          className="preview-card"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+        >
+          <div className="preview-icon">❤️</div>
+          <h2>Our Journey</h2>
+          <p>Follow every milestone from our wedding to Baby Evvala&apos;s arrival.</p>
+          <Link to="/story" className="hero-v2-button preview-btn">
             Explore Story
           </Link>
-
         </motion.div>
 
         <motion.div
-          whileInView={{ opacity: 1, y: 0 }}
-          initial={{ opacity: 0, y: 40 }}
-          transition={{ delay: .15 }}
-          viewport={{ once: true }}
           className="preview-card"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.15 }}
+          viewport={{ once: true }}
         >
           <div className="preview-icon">📸</div>
-
           <h2>Gallery</h2>
-
-          <p>
-            Beautiful memories captured throughout
-            this incredible journey.
-          </p>
-
-          <Link to="/gallery" className="hero-v2-button">
+          <p>Beautiful memories captured throughout this incredible journey.</p>
+          <Link to="/gallery" className="hero-v2-button preview-btn">
             View Gallery
           </Link>
-
         </motion.div>
 
         <motion.div
-          whileInView={{ opacity: 1, y: 0 }}
-          initial={{ opacity: 0, y: 40 }}
-          transition={{ delay: .3 }}
-          viewport={{ once: true }}
           className="preview-card"
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          viewport={{ once: true }}
         >
           <div className="preview-icon">💌</div>
-
           <h2>Blessings</h2>
-
-          <p>
-            Read heartfelt blessings from family
-            and friends around the world.
-          </p>
-
-          <Link to="/blessings" className="hero-v2-button">
+          <p>Read heartfelt blessings from family and friends around the world.</p>
+          <Link to="/blessings" className="hero-v2-button preview-btn">
             Read Blessings
           </Link>
-
         </motion.div>
-
       </section>
     </>
   );
