@@ -6,7 +6,9 @@ import { useRevealSettings } from "../hooks/useRevealSettings";
 import { useLanguage } from "../i18n/LanguageContext";
 import "./RevealCinematic.css";
 
-type Stage = "countdown" | "suspense" | "celebration";
+type Stage = "countdown" | "suspense" | "waiting" | "celebration";
+
+const SUSPENSE_DURATION_MS = 10000;
 
 export default function Reveal() {
   const { settings } = useRevealSettings();
@@ -28,30 +30,47 @@ export default function Reveal() {
   }, []);
 
   useEffect(() => {
-    if (!settings?.enabled) return;
+    if (!settings?.enabled) {
+      setStage("countdown");
+      setHasCelebrated(false);
+      return;
+    }
 
     const revealTime = new Date(settings.revealDate).getTime();
 
-    if (Date.now() >= revealTime) {
-      setStage("suspense");
-    } else {
+    if (Date.now() < revealTime) {
       setStage("countdown");
       setHasCelebrated(false);
+      return;
     }
-  }, [settings]);
+
+    if (settings.resultPublished && settings.gender) {
+      setStage("suspense");
+      setHasCelebrated(false);
+      return;
+    }
+
+    setStage("waiting");
+    setHasCelebrated(false);
+  }, [
+    settings?.enabled,
+    settings?.revealDate,
+    settings?.resultPublished,
+    settings?.gender,
+  ]);
 
   useEffect(() => {
     if (stage !== "suspense") return;
 
     const timer = window.setTimeout(() => {
       setStage("celebration");
-    }, 4500);
+    }, SUSPENSE_DURATION_MS);
 
     return () => clearTimeout(timer);
   }, [stage]);
 
   useEffect(() => {
-    if (stage !== "celebration" || !settings || hasCelebrated) return;
+    if (stage !== "celebration" || !settings?.gender || hasCelebrated) return;
 
     setHasCelebrated(true);
 
@@ -78,7 +97,7 @@ export default function Reveal() {
     }, 260);
 
     return () => clearInterval(interval);
-  }, [stage, settings, hasCelebrated]);
+  }, [stage, settings?.gender, hasCelebrated]);
 
   if (!settings) {
     return (
@@ -103,11 +122,22 @@ export default function Reveal() {
 
   const revealTime = new Date(settings.revealDate).getTime();
 
+  if (stage === "waiting") {
+    return (
+      <RevealShell
+        icon="❤️"
+        eyebrow={t.brand.babyNameTelugu}
+        title="The moment is almost ready"
+        text="Please stay on this page. The final reveal will begin as soon as the family publishes the result."
+      />
+    );
+  }
+
   if (stage === "suspense") {
     return <RevealSuspense />;
   }
 
-  if (stage === "celebration") {
+  if (stage === "celebration" && settings.gender) {
     const isBoy = settings.gender === "boy";
 
     return (
@@ -119,7 +149,11 @@ export default function Reveal() {
           numberOfPieces={520}
         />
 
-        <main className={isBoy ? "reveal-final boy-final" : "reveal-final girl-final"}>
+        <main
+          className={
+            isBoy ? "reveal-final boy-final" : "reveal-final girl-final"
+          }
+        >
           <div className="reveal-stars" />
           <div className="reveal-final-moon" />
           <div className="reveal-heartbeat" />
@@ -143,26 +177,49 @@ export default function Reveal() {
   return (
     <Countdown
       date={revealTime}
-      onComplete={() => setStage("suspense")}
-      renderer={({ days, hours, minutes, seconds }) => (
-        <main className="reveal-cinematic-page">
-          <div className="reveal-stars" />
-          <div className="reveal-moon" />
+      onComplete={() => {
+        if (settings.resultPublished && settings.gender) {
+          setStage("suspense");
+        } else {
+          setStage("waiting");
+        }
+      }}
+      renderer={({ days, hours, minutes, seconds, completed }) => {
+        if (completed) {
+          if (settings.resultPublished && settings.gender) {
+            return <RevealSuspense />;
+          }
 
-          <section className="reveal-cinematic-card">
-            <p className="reveal-eyebrow">{t.reveal.countdownEyebrow}</p>
-            <h1>{t.reveal.countdownTitle}</h1>
-            <p>{t.reveal.countdownText}</p>
+          return (
+            <RevealShell
+              icon="❤️"
+              eyebrow={t.brand.babyNameTelugu}
+              title="The moment is almost ready"
+              text="Please stay on this page. The final reveal will begin as soon as the family publishes the result."
+            />
+          );
+        }
 
-            <div className="cinematic-countdown-grid">
-              <TimeCard value={days} label={t.reveal.days} />
-              <TimeCard value={hours} label={t.reveal.hours} />
-              <TimeCard value={minutes} label={t.reveal.minutes} />
-              <TimeCard value={seconds} label={t.reveal.seconds} />
-            </div>
-          </section>
-        </main>
-      )}
+        return (
+          <main className="reveal-cinematic-page">
+            <div className="reveal-stars" />
+            <div className="reveal-moon" />
+
+            <section className="reveal-cinematic-card">
+              <p className="reveal-eyebrow">{t.reveal.countdownEyebrow}</p>
+              <h1>{t.reveal.countdownTitle}</h1>
+              <p>{t.reveal.countdownText}</p>
+
+              <div className="cinematic-countdown-grid">
+                <TimeCard value={days} label={t.reveal.days} />
+                <TimeCard value={hours} label={t.reveal.hours} />
+                <TimeCard value={minutes} label={t.reveal.minutes} />
+                <TimeCard value={seconds} label={t.reveal.seconds} />
+              </div>
+            </section>
+          </main>
+        );
+      }}
     />
   );
 }

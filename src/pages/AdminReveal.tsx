@@ -1,29 +1,40 @@
 import { useEffect, useState } from "react";
 import CMSLayout from "../components/cms/CMSLayout";
-import { db } from "../firebase";
-import { doc, getDoc, setDoc } from "firebase/firestore";
+import {
+  publishRevealResult,
+  saveRevealSettings,
+  subscribeToPublicRevealSettings,
+  subscribeToRevealSettings,
+  unpublishRevealResult,
+} from "../services/revealService";
 
 export default function AdminReveal() {
   const [gender, setGender] = useState<"girl" | "boy">("girl");
   const [revealDate, setRevealDate] = useState("");
   const [enabled, setEnabled] = useState(false);
+  const [resultPublished, setResultPublished] = useState(false);
+
   const [saving, setSaving] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [unpublishing, setUnpublishing] = useState(false);
 
   useEffect(() => {
-    async function loadRevealSettings() {
-      const ref = doc(db, "settings", "reveal");
-      const snapshot = await getDoc(ref);
+    const unsubscribePrivate = subscribeToRevealSettings((settings) => {
+      if (!settings) return;
 
-      if (snapshot.exists()) {
-        const data = snapshot.data();
+      setGender(settings.gender === "boy" ? "boy" : "girl");
+      setRevealDate(settings.revealDate || "");
+      setEnabled(Boolean(settings.enabled));
+    });
 
-        setGender(data.gender === "boy" ? "boy" : "girl");
-        setRevealDate(data.revealDate || "");
-        setEnabled(Boolean(data.enabled));
-      }
-    }
+    const unsubscribePublic = subscribeToPublicRevealSettings((settings) => {
+      setResultPublished(Boolean(settings?.resultPublished));
+    });
 
-    loadRevealSettings();
+    return () => {
+      unsubscribePrivate();
+      unsubscribePublic();
+    };
   }, []);
 
   async function saveSettings() {
@@ -35,22 +46,58 @@ export default function AdminReveal() {
     try {
       setSaving(true);
 
-      await setDoc(
-        doc(db, "settings", "reveal"),
-        {
-          gender,
-          revealDate,
-          enabled,
-        },
-        { merge: true }
-      );
+      await saveRevealSettings({
+        gender,
+        revealDate,
+        enabled,
+      });
 
-      alert("Reveal settings saved ❤️");
+      alert(
+        "Reveal settings saved ❤️\n\nThe result is still hidden from the public until you click Publish Result."
+      );
     } catch (error) {
       console.error(error);
       alert("Save failed.");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function publishResult() {
+    const confirmed = window.confirm(
+      "Are you sure you want to publish the final result publicly?\n\nAfter this, family members can see the gender after the suspense screen."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setPublishing(true);
+      await publishRevealResult();
+      alert("Reveal result published publicly 🎉");
+    } catch (error) {
+      console.error(error);
+      alert("Publishing failed.");
+    } finally {
+      setPublishing(false);
+    }
+  }
+
+  async function hideResult() {
+    const confirmed = window.confirm(
+      "Hide the public result again?\n\nThis is useful for testing before the real reveal."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setUnpublishing(true);
+      await unpublishRevealResult();
+      alert("Reveal result hidden again.");
+    } catch (error) {
+      console.error(error);
+      alert("Failed to hide result.");
+    } finally {
+      setUnpublishing(false);
     }
   }
 
@@ -110,18 +157,65 @@ export default function AdminReveal() {
             }}
           >
             <strong style={{ color: enabled ? "#86efac" : "#f7d774" }}>
-              Current Status:
+              Reveal Status:
             </strong>{" "}
             {enabled ? "Reveal is active" : "Reveal is disabled"}
             <br />
+
             <span style={{ color: "#ccc" }}>
-              Final reveal: {gender === "girl" ? "Girl 💖" : "Boy 💙"}
+              Saved private result: {gender === "girl" ? "Girl 💖" : "Boy 💙"}
+            </span>
+            <br />
+
+            <span style={{ color: resultPublished ? "#86efac" : "#f7d774" }}>
+              Public result: {resultPublished ? "Published 🎉" : "Hidden 🔒"}
             </span>
           </div>
 
-          <button className="primary-btn" onClick={saveSettings} disabled={saving}>
+          <button
+            className="primary-btn"
+            onClick={saveSettings}
+            disabled={saving}
+            type="button"
+          >
             {saving ? "Saving..." : "Save Reveal Settings ❤️"}
           </button>
+
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
+              gap: 14,
+              marginTop: 14,
+            }}
+          >
+            <button
+              className="primary-btn"
+              onClick={publishResult}
+              disabled={publishing || !enabled || !revealDate}
+              type="button"
+              style={{
+                background:
+                  "linear-gradient(135deg, rgba(34,197,94,0.95), rgba(16,185,129,0.95))",
+              }}
+            >
+              {publishing ? "Publishing..." : "Publish Result 🎉"}
+            </button>
+
+            <button
+              className="secondary-btn"
+              onClick={hideResult}
+              disabled={unpublishing}
+              type="button"
+            >
+              {unpublishing ? "Hiding..." : "Hide Result Again 🔒"}
+            </button>
+          </div>
+
+          <p style={{ color: "#aaa", fontSize: ".9rem", lineHeight: 1.7 }}>
+            Save Settings keeps the gender private. Publish Result is the button
+            that makes the gender visible to the public reveal page.
+          </p>
         </div>
       </div>
     </CMSLayout>

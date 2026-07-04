@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { subscribeToRevealSettings } from "../services/revealService";
-import type { RevealSettings } from "../types/reveal";
+import {
+  subscribeToPublicRevealSettings,
+  type PublicRevealSettings,
+} from "../services/revealService";
 
 export function useRevealSettings() {
-  const [settings, setSettings] = useState<RevealSettings | null>(null);
+  const [settings, setSettings] = useState<PublicRevealSettings | null>(null);
 
   useEffect(() => {
-    const unsubscribe = subscribeToRevealSettings(setSettings);
+    const unsubscribe = subscribeToPublicRevealSettings(setSettings);
     return () => unsubscribe();
   }, []);
 
