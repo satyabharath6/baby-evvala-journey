@@ -8,6 +8,7 @@ import {
   Sparkles,
   Images,
   PartyPopper,
+  LockKeyhole,
 } from "lucide-react";
 import { useLanguage } from "../i18n/LanguageContext";
 
@@ -35,6 +36,9 @@ export default function Navbar() {
       ? "బేబీ ఇవ్వల కోసం ప్రేమతో తయారు చేయబడింది ❤️"
       : "Made with ❤️ for Baby Evvala";
 
+  const signInLabel = language === "te" ? "సైన్ ఇన్" : "Sign In";
+  const adminSignInLabel = language === "te" ? "అడ్మిన్ సైన్ ఇన్" : "Admin Sign In";
+
   return (
     <>
       <nav className="navbar">
@@ -48,6 +52,10 @@ export default function Navbar() {
               {item.name}
             </Link>
           ))}
+
+          <Link to="/admin" className="nav-link">
+            {signInLabel}
+          </Link>
         </div>
 
         <button
@@ -97,6 +105,21 @@ export default function Navbar() {
                   {item.name}
                 </Link>
               ))}
+
+              <Link
+                to="/admin"
+                className={
+                  location.pathname.startsWith("/admin")
+                    ? "drawer-link active-drawer-link"
+                    : "drawer-link"
+                }
+                onClick={() => setOpen(false)}
+              >
+                <span>
+                  <LockKeyhole size={20} />
+                </span>
+                {adminSignInLabel}
+              </Link>
             </div>
 
             <div className="drawer-footer">{drawerFooter}</div>
