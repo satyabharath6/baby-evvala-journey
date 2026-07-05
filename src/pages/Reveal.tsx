@@ -1,18 +1,20 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Countdown from "react-countdown";
 import Confetti from "react-confetti";
 import confetti from "canvas-confetti";
 import { useRevealSettings } from "../hooks/useRevealSettings";
 import { useLanguage } from "../i18n/LanguageContext";
-import "./RevealCinematic.css";
 import RevealWaitingRoom from "../components/widgets/RevealWaitingRoom";
+import "./RevealCinematic.css";
+
 type Stage = "countdown" | "suspense" | "waiting" | "celebration";
 
 const SUSPENSE_DURATION_MS = 10000;
 
 export default function Reveal() {
   const { settings } = useRevealSettings();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   const [stage, setStage] = useState<Stage>("countdown");
   const [hasCelebrated, setHasCelebrated] = useState(false);
@@ -20,6 +22,21 @@ export default function Reveal() {
     width: window.innerWidth,
     height: window.innerHeight,
   });
+
+  const finalActions =
+    language === "te"
+      ? {
+          blessings: "❤️ ఆశీర్వాదం ఇవ్వండి",
+          predictions: "🔮 కుటుంబ అంచనాలు",
+          gallery: "📸 గ్యాలరీ చూడండి",
+          home: "🏠 హోమ్‌కు వెళ్లండి",
+        }
+      : {
+          blessings: "❤️ Leave Blessing",
+          predictions: "🔮 Family Predictions",
+          gallery: "📸 View Gallery",
+          home: "🏠 Back Home",
+        };
 
   useEffect(() => {
     const resize = () =>
@@ -127,8 +144,8 @@ export default function Reveal() {
       <RevealShell
         icon="❤️"
         eyebrow={t.brand.babyNameTelugu}
-        title="The moment is almost ready"
-        text="Please stay on this page. The final reveal will begin as soon as the family publishes the result."
+        title={t.reveal.waitingTitle}
+        text={t.reveal.waitingText}
       />
     );
   }
@@ -168,6 +185,13 @@ export default function Reveal() {
             <h2>{t.reveal.welcome}</h2>
 
             <p>{t.reveal.thankYou}</p>
+
+            <div className="final-reveal-actions">
+              <Link to="/blessings">{finalActions.blessings}</Link>
+              <Link to="/prediction">{finalActions.predictions}</Link>
+              <Link to="/gallery">{finalActions.gallery}</Link>
+              <Link to="/">{finalActions.home}</Link>
+            </div>
           </section>
         </main>
       </>
@@ -195,7 +219,7 @@ export default function Reveal() {
               icon="❤️"
               eyebrow={t.brand.babyNameTelugu}
               title={t.reveal.waitingTitle}
-text={t.reveal.waitingText}
+              text={t.reveal.waitingText}
             />
           );
         }
@@ -216,6 +240,7 @@ text={t.reveal.waitingText}
                 <TimeCard value={minutes} label={t.reveal.minutes} />
                 <TimeCard value={seconds} label={t.reveal.seconds} />
               </div>
+
               <RevealWaitingRoom />
             </section>
           </main>
