@@ -12,7 +12,11 @@ import {
   serverTimestamp,
   updateDoc,
 } from "firebase/firestore";
-import { uploadMedia, deleteMedia, type MediaType } from "../services/uploadService";
+import {
+  uploadMedia,
+  deleteMedia,
+  type MediaType,
+} from "../services/uploadService";
 
 type TimelineEvent = {
   id: string;
@@ -99,8 +103,18 @@ export default function AdminTimeline() {
   }
 
   async function saveEvent() {
-    if (!emoji || !title || !date || !description) {
-      alert("Please complete emoji, English title, date, and English story.");
+    const hasAnyContent =
+      title.trim() ||
+      titleTe.trim() ||
+      description.trim() ||
+      descriptionTe.trim() ||
+      whyItMattered.trim() ||
+      whyItMatteredTe.trim() ||
+      file ||
+      editingEvent?.mediaUrl;
+
+    if (!hasAnyContent) {
+      alert("Please add at least a title, story, note, or media.");
       return;
     }
 
@@ -108,16 +122,16 @@ export default function AdminTimeline() {
       setSaving(true);
 
       const baseData = {
-        emoji,
-        title,
-        titleTe,
-        date,
-        location,
-        locationTe,
-        description,
-        descriptionTe,
-        whyItMattered,
-        whyItMatteredTe,
+        emoji: emoji.trim() || "✨",
+        title: title.trim() || titleTe.trim() || "Untitled Memory",
+        titleTe: titleTe.trim(),
+        date: date || new Date().toISOString().slice(0, 10),
+        location: location.trim(),
+        locationTe: locationTe.trim(),
+        description: description.trim() || descriptionTe.trim() || "",
+        descriptionTe: descriptionTe.trim(),
+        whyItMattered: whyItMattered.trim(),
+        whyItMatteredTe: whyItMatteredTe.trim(),
       };
 
       if (editingEvent) {
@@ -221,7 +235,7 @@ export default function AdminTimeline() {
           <input
             value={emoji}
             onChange={(e) => setEmoji(e.target.value)}
-            placeholder="❤️ 🩺 👣 🎀"
+            placeholder="Optional — default ✨"
           />
 
           <label>Date</label>
@@ -252,14 +266,14 @@ export default function AdminTimeline() {
           <input
             value={title}
             onChange={(e) => setTitle(e.target.value)}
-            placeholder="First Heartbeat"
+            placeholder="Optional"
           />
 
           <label>English Location</label>
           <input
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            placeholder="Atlanta, Georgia"
+            placeholder="Optional"
           />
 
           <label>English Story</label>
@@ -267,7 +281,7 @@ export default function AdminTimeline() {
             rows={5}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            placeholder="Tell the story of this moment..."
+            placeholder="Optional"
           />
 
           <label>Why This Moment Mattered</label>
@@ -275,7 +289,7 @@ export default function AdminTimeline() {
             rows={4}
             value={whyItMattered}
             onChange={(e) => setWhyItMattered(e.target.value)}
-            placeholder="Why was this moment special?"
+            placeholder="Optional"
           />
 
           <hr style={{ margin: "34px 0", opacity: 0.2 }} />
@@ -286,14 +300,14 @@ export default function AdminTimeline() {
           <input
             value={titleTe}
             onChange={(e) => setTitleTe(e.target.value)}
-            placeholder="మొదటి గుండె చప్పుడు"
+            placeholder="ఐచ్చికం"
           />
 
           <label>Telugu Location</label>
           <input
             value={locationTe}
             onChange={(e) => setLocationTe(e.target.value)}
-            placeholder="అట్లాంటా, జార్జియా"
+            placeholder="ఐచ్చికం"
           />
 
           <label>Telugu Story</label>
@@ -301,7 +315,7 @@ export default function AdminTimeline() {
             rows={5}
             value={descriptionTe}
             onChange={(e) => setDescriptionTe(e.target.value)}
-            placeholder="ఈ క్షణం గురించి తెలుగులో రాయండి..."
+            placeholder="ఐచ్చికం"
           />
 
           <label>ఈ క్షణం ఎందుకు ప్రత్యేకం?</label>
@@ -309,7 +323,7 @@ export default function AdminTimeline() {
             rows={4}
             value={whyItMatteredTe}
             onChange={(e) => setWhyItMatteredTe(e.target.value)}
-            placeholder="ఈ క్షణం ఎందుకు ముఖ్యమైందో తెలుగులో రాయండి..."
+            placeholder="ఐచ్చికం"
           />
 
           <button className="primary-btn" onClick={saveEvent} disabled={saving}>
@@ -384,7 +398,7 @@ export default function AdminTimeline() {
 
           {event.location && <p style={{ color: "#ccc" }}>📍 {event.location}</p>}
 
-          <p style={{ lineHeight: 1.7 }}>{event.description}</p>
+          {event.description && <p style={{ lineHeight: 1.7 }}>{event.description}</p>}
 
           {event.whyItMattered && (
             <p style={{ lineHeight: 1.7, color: "#ffd6f3" }}>
@@ -425,7 +439,14 @@ export default function AdminTimeline() {
             </div>
           )}
 
-          <div style={{ display: "flex", gap: 12, flexWrap: "wrap", marginTop: 18 }}>
+          <div
+            style={{
+              display: "flex",
+              gap: 12,
+              flexWrap: "wrap",
+              marginTop: 18,
+            }}
+          >
             <button
               onClick={() => startEdit(event)}
               style={{
