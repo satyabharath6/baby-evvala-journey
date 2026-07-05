@@ -147,6 +147,9 @@ export const translations = {
     },
 
     reveal: {
+        waitingTitle: "The moment is almost ready",
+waitingText:
+  "Please stay on this page. The final reveal will begin as soon as the family publishes the result.",
       comingSoon: "Reveal Coming Soon",
       comingSoonText: "Our little miracle's special moment is almost here ❤️",
       countdownEyebrow: "🎉 Baby ఇవ్వల Reveal",
@@ -314,6 +317,9 @@ export const translations = {
     },
 
     reveal: {
+        waitingTitle: "ఆ ప్రత్యేక క్షణం దాదాపు సిద్ధంగా ఉంది",
+waitingText:
+  "దయచేసి ఈ పేజీలోనే ఉండండి. కుటుంబం ఫలితాన్ని పబ్లిష్ చేసిన వెంటనే రివీల్ ప్రారంభమవుతుంది.",
       comingSoon: "రివీల్ త్వరలో వస్తుంది",
       comingSoonText:
         "మన చిన్న అద్భుతం కోసం ఆ ప్రత్యేకమైన క్షణం దగ్గరలోనే ఉంది ❤️",
