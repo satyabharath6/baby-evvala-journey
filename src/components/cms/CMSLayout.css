@@ -164,3 +164,85 @@
     padding: 24px;
   }
 }
+/* ================================
+   CMS MOBILE LAYOUT FIX
+================================ */
+
+@media (max-width: 800px) {
+  .cms-layout {
+    display: block;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .cms-sidebar {
+    position: relative;
+    width: 100%;
+    max-width: none;
+    min-height: auto;
+    height: auto;
+    padding: 24px 20px;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .cms-brand {
+    margin-bottom: 28px;
+  }
+
+  .cms-brand h2 {
+    font-size: 1.45rem;
+  }
+
+  .cms-nav {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .cms-nav-label {
+    grid-column: 1 / -1;
+    margin: 18px 0 4px;
+  }
+
+  .cms-nav a {
+    justify-content: center;
+    text-align: center;
+    padding: 14px 12px;
+  }
+
+  .cms-sidebar-footer {
+    margin-top: 26px;
+  }
+
+  .cms-user {
+    margin-top: 18px;
+  }
+
+  .cms-main {
+    width: 100%;
+    min-height: auto;
+  }
+
+  .cms-content {
+    padding: 24px 18px 60px;
+  }
+
+  .cms-header {
+    padding: 24px 18px 0;
+  }
+}
+
+@media (max-width: 430px) {
+  .cms-nav {
+    grid-template-columns: 1fr;
+  }
+
+  .cms-sidebar {
+    padding: 22px 18px;
+  }
+
+  .cms-content {
+    padding: 22px 16px 56px;
+  }
+}

@@ -4,7 +4,7 @@ import { onAuthStateChanged, type User } from "firebase/auth";
 import CMSLayout from "../components/cms/CMSLayout";
 import { useAdminStats } from "../hooks/useAdminStats";
 import { auth } from "../firebase";
-
+import "./Admin.css";
 export default function Admin() {
   const stats = useAdminStats();
   const [user, setUser] = useState<User | null>(null);
