@@ -2,6 +2,7 @@ import { useState } from "react";
 import { addRevealGuest } from "../../services/revealGuestService";
 import { useRevealGuests } from "../../hooks/useRevealGuests";
 import { useLanguage } from "../../i18n/LanguageContext";
+import RevealHeartReactions from "./RevealHeartReactions";
 import "./RevealWaitingRoom.css";
 
 export default function RevealWaitingRoom() {
@@ -38,11 +39,15 @@ export default function RevealWaitingRoom() {
     },
   }[language];
 
- async function handleSubmit(event: { preventDefault: () => void }) {
+  async function handleSubmit(event: { preventDefault: () => void }) {
     event.preventDefault();
 
     if (!name.trim() || !city.trim()) {
-      alert(language === "te" ? "దయచేసి పేరు మరియు ఊరు రాయండి." : "Please enter name and city.");
+      alert(
+        language === "te"
+          ? "దయచేసి పేరు మరియు ఊరు రాయండి."
+          : "Please enter name and city."
+      );
       return;
     }
 
@@ -117,6 +122,8 @@ export default function RevealWaitingRoom() {
           ))
         )}
       </div>
+
+      <RevealHeartReactions />
     </section>
   );
 }

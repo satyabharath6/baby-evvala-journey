@@ -1,0 +1,92 @@
+.reveal-heart-reactions {
+  position: relative;
+  width: min(100%, 520px);
+  margin: 26px auto 0;
+  padding: 22px;
+  border-radius: 24px;
+  text-align: center;
+  color: white;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+  overflow: hidden;
+}
+
+.reveal-heart-reactions p {
+  margin: 0 0 14px;
+  color: rgba(255, 255, 255, 0.82);
+  font-weight: 800;
+}
+
+.reveal-heart-reactions button {
+  padding: 14px 24px;
+  border-radius: 999px;
+  border: none;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff5fa2, #9b4dff);
+  box-shadow: 0 12px 32px rgba(155, 77, 255, 0.28);
+}
+
+.reveal-heart-reactions button:hover {
+  transform: translateY(-2px);
+}
+
+.heart-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 34px;
+  height: 34px;
+  margin-left: 10px;
+  border-radius: 999px;
+  color: #f7d774;
+  font-weight: 900;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.floating-heart-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floating-heart {
+  position: absolute;
+  bottom: 12px;
+  font-size: 2rem;
+  animation: floatHeart 2.6s ease-out forwards;
+}
+
+@keyframes floatHeart {
+  0% {
+    transform: translateY(0) scale(0.8);
+    opacity: 0;
+  }
+
+  15% {
+    opacity: 1;
+  }
+
+  100% {
+    transform: translateY(-170px) scale(1.45);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 700px) {
+  .reveal-heart-reactions {
+    padding: 20px 16px;
+  }
+
+  .reveal-heart-reactions button {
+    width: 100%;
+  }
+
+  .heart-count {
+    margin-left: 0;
+    margin-top: 12px;
+  }
+}
