@@ -1,0 +1,36 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email in [
+          "satyabharath6@gmail.com",
+          "honeysrievvala@gmail.com",
+          "satyaevvala2023@u.northwestern.edu"
+        ];
+    }
+
+    function isImageOrVideo() {
+      return request.resource.contentType.matches("image/.*")
+        || request.resource.contentType.matches("video/.*");
+    }
+
+    function isSafeSize() {
+      return request.resource.size < 100 * 1024 * 1024;
+    }
+
+    match /{allPaths=**} {
+      allow read: if true;
+
+      allow create, update: if isAdmin() && isImageOrVideo() && isSafeSize();
+
+      allow delete: if isAdmin();
+    }
+  }
+}

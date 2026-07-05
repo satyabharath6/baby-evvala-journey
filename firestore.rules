@@ -1,0 +1,107 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return isSignedIn()
+        && request.auth.token.email in [
+          "satyabharath6@gmail.com",
+          "honeysrievvala@gmail.com",
+          "satyaevvala2023@u.northwestern.edu"
+        ];
+    }
+
+    function isShortText(value, maxLength) {
+      return value is string && value.size() > 0 && value.size() <= maxLength;
+    }
+
+    function isOptionalText(fieldName, maxLength) {
+      return !(fieldName in request.resource.data)
+        || (
+          request.resource.data[fieldName] is string
+          && request.resource.data[fieldName].size() <= maxLength
+        );
+    }
+
+    function isValidBlessingCreate() {
+      return request.resource.data.keys().hasOnly([
+          "name",
+          "city",
+          "message",
+          "submittedAt"
+        ])
+        && isShortText(request.resource.data.name, 80)
+        && isShortText(request.resource.data.city, 80)
+        && isShortText(request.resource.data.message, 1000);
+    }
+
+    function isValidPredictionCreate() {
+      return request.resource.data.keys().hasOnly([
+          "name",
+          "relationship",
+          "city",
+          "gender",
+          "babyName",
+          "birthDate",
+          "message",
+          "submittedAt"
+        ])
+        && isShortText(request.resource.data.name, 80)
+        && request.resource.data.gender in ["Boy", "Girl"]
+        && isOptionalText("relationship", 80)
+        && isOptionalText("city", 80)
+        && isOptionalText("babyName", 100)
+        && isOptionalText("birthDate", 40)
+        && isOptionalText("message", 1000);
+    }
+
+    match /settings/revealPublic {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /settings/reveal {
+      allow read, write: if isAdmin();
+    }
+
+    match /settings/homeLetter {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    match /settings/{document=**} {
+      allow read, write: if isAdmin();
+    }
+
+    match /timeline/{memoryId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /gallery/{photoId} {
+      allow read: if true;
+      allow create, update, delete: if isAdmin();
+    }
+
+    match /blessings/{blessingId} {
+      allow read: if true;
+      allow create: if isValidBlessingCreate();
+      allow update, delete: if isAdmin();
+    }
+
+    match /predictions/{predictionId} {
+      allow read: if true;
+      allow create: if isValidPredictionCreate();
+      allow update, delete: if isAdmin();
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
