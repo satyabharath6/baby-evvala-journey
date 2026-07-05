@@ -18,7 +18,7 @@ export default function HomeLetter() {
     <section className="section-shell home-letter-section">
       <div className="elevated-card home-letter-card">
         <p className="section-kicker">
-          {language === "te" ? "మా బేబీకి" : "For Our Baby"}
+          {language === "te" ? "మా హృదయాల నుండి" : "From Our Hearts"}
         </p>
 
         <h2 className="section-heading">{title}</h2>
