@@ -1,11 +1,13 @@
 import {
   addDoc,
   collection,
+  getDocs,
   limit,
   onSnapshot,
   orderBy,
   query,
   serverTimestamp,
+  writeBatch,
 } from "firebase/firestore";
 import { db } from "../firebase";
 import type { RevealGuest } from "../types/revealGuest";
@@ -39,4 +41,22 @@ export async function addRevealGuest({
     city: city.trim(),
     createdAt: serverTimestamp(),
   });
+}
+
+export async function clearRevealGuests() {
+  const snapshot = await getDocs(query(revealGuestsRef, limit(500)));
+
+  if (snapshot.empty) {
+    return 0;
+  }
+
+  const batch = writeBatch(db);
+
+  snapshot.docs.forEach((docSnapshot) => {
+    batch.delete(docSnapshot.ref);
+  });
+
+  await batch.commit();
+
+  return snapshot.size;
 }

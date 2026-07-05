@@ -1,9 +1,6 @@
-import {
-  toDateTimeLocalValue,
-  toStoredRevealDate,
-} from "../utils/revealTime";
 import { useEffect, useState } from "react";
 import CMSLayout from "../components/cms/CMSLayout";
+import { clearRevealGuests } from "../services/revealGuestService";
 import {
   publishRevealResult,
   saveRevealSettings,
@@ -11,6 +8,10 @@ import {
   subscribeToRevealSettings,
   unpublishRevealResult,
 } from "../services/revealService";
+import {
+  toDateTimeLocalValue,
+  toStoredRevealDate,
+} from "../utils/revealTime";
 
 export default function AdminReveal() {
   const [gender, setGender] = useState<"girl" | "boy">("girl");
@@ -21,6 +22,7 @@ export default function AdminReveal() {
   const [saving, setSaving] = useState(false);
   const [publishing, setPublishing] = useState(false);
   const [unpublishing, setUnpublishing] = useState(false);
+  const [clearingGuests, setClearingGuests] = useState(false);
 
   useEffect(() => {
     const unsubscribePrivate = subscribeToRevealSettings((settings) => {
@@ -102,6 +104,26 @@ export default function AdminReveal() {
       alert("Failed to hide result.");
     } finally {
       setUnpublishing(false);
+    }
+  }
+
+  async function clearWaitingRoom() {
+    const confirmed = window.confirm(
+      "Clear all waiting room guests?\n\nUse this before the real reveal to remove test entries."
+    );
+
+    if (!confirmed) return;
+
+    try {
+      setClearingGuests(true);
+      const deletedCount = await clearRevealGuests();
+
+      alert(`Waiting room cleared 🧹\n\nDeleted guests: ${deletedCount}`);
+    } catch (error) {
+      console.error(error);
+      alert("Failed to clear waiting room.");
+    } finally {
+      setClearingGuests(false);
     }
   }
 
@@ -214,11 +236,21 @@ export default function AdminReveal() {
             >
               {unpublishing ? "Hiding..." : "Hide Result Again 🔒"}
             </button>
+
+            <button
+              className="secondary-btn"
+              onClick={clearWaitingRoom}
+              disabled={clearingGuests}
+              type="button"
+            >
+              {clearingGuests ? "Clearing..." : "Clear Waiting Room 🧹"}
+            </button>
           </div>
 
           <p style={{ color: "#aaa", fontSize: ".9rem", lineHeight: 1.7 }}>
             Save Settings keeps the gender private. Publish Result is the button
-            that makes the gender visible to the public reveal page.
+            that makes the gender visible to the public reveal page. Clear
+            Waiting Room removes test guests before sharing with family.
           </p>
         </div>
       </div>
