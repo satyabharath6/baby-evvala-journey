@@ -1,3 +1,7 @@
+import {
+  toDateTimeLocalValue,
+  toStoredRevealDate,
+} from "../utils/revealTime";
 import { useEffect, useState } from "react";
 import CMSLayout from "../components/cms/CMSLayout";
 import {
@@ -23,7 +27,7 @@ export default function AdminReveal() {
       if (!settings) return;
 
       setGender(settings.gender === "boy" ? "boy" : "girl");
-      setRevealDate(settings.revealDate || "");
+      setRevealDate(toDateTimeLocalValue(settings.revealDate));
       setEnabled(Boolean(settings.enabled));
     });
 
@@ -48,7 +52,7 @@ export default function AdminReveal() {
 
       await saveRevealSettings({
         gender,
-        revealDate,
+        revealDate: toStoredRevealDate(revealDate),
         enabled,
       });
 

@@ -1,0 +1,135 @@
+.reveal-waiting-room {
+  width: min(100%, 760px);
+  margin: 32px auto 0;
+  padding: 28px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.075);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  backdrop-filter: blur(16px);
+}
+
+.waiting-room-header h2 {
+  margin: 0;
+  color: white;
+  font-size: clamp(1.6rem, 4vw, 2.4rem);
+}
+
+.waiting-room-header p {
+  margin: 10px auto 0;
+  color: rgba(255, 255, 255, 0.78);
+  line-height: 1.7;
+}
+
+.waiting-room-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.waiting-room-form input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 14px 16px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 1rem;
+}
+
+.waiting-room-form input::placeholder {
+  color: rgba(255, 255, 255, 0.58);
+}
+
+.waiting-room-form button {
+  padding: 14px 20px;
+  border-radius: 999px;
+  border: none;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff5fa2, #9b4dff);
+}
+
+.waiting-room-joined {
+  margin-top: 22px;
+  padding: 16px;
+  border-radius: 18px;
+  color: #fff;
+  font-weight: 900;
+  background: rgba(34, 197, 94, 0.14);
+  border: 1px solid rgba(34, 197, 94, 0.28);
+}
+
+.waiting-room-count {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 22px;
+  color: white;
+}
+
+.waiting-room-count strong {
+  color: #f7d774;
+  font-size: 2rem;
+}
+
+.waiting-room-count span {
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.waiting-room-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.waiting-room-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 18px;
+  text-align: left;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.waiting-room-person strong {
+  display: block;
+  color: white;
+}
+
+.waiting-room-person p {
+  margin: 3px 0 0;
+  color: #cfcfcf;
+  font-size: 0.9rem;
+}
+
+.waiting-room-empty {
+  grid-column: 1 / -1;
+  color: #ccc;
+  margin: 0;
+}
+
+@media (max-width: 700px) {
+  .reveal-waiting-room {
+    padding: 22px 16px;
+    border-radius: 22px;
+  }
+
+  .waiting-room-form {
+    grid-template-columns: 1fr;
+  }
+
+  .waiting-room-form button {
+    width: 100%;
+  }
+
+  .waiting-room-count {
+    flex-direction: column;
+    gap: 2px;
+  }
+}

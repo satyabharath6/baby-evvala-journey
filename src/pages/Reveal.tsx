@@ -5,7 +5,7 @@ import confetti from "canvas-confetti";
 import { useRevealSettings } from "../hooks/useRevealSettings";
 import { useLanguage } from "../i18n/LanguageContext";
 import "./RevealCinematic.css";
-
+import RevealWaitingRoom from "../components/widgets/RevealWaitingRoom";
 type Stage = "countdown" | "suspense" | "waiting" | "celebration";
 
 const SUSPENSE_DURATION_MS = 10000;
@@ -194,8 +194,8 @@ export default function Reveal() {
             <RevealShell
               icon="❤️"
               eyebrow={t.brand.babyNameTelugu}
-              title="The moment is almost ready"
-              text="Please stay on this page. The final reveal will begin as soon as the family publishes the result."
+              title={t.reveal.waitingTitle}
+text={t.reveal.waitingText}
             />
           );
         }
@@ -216,6 +216,7 @@ export default function Reveal() {
                 <TimeCard value={minutes} label={t.reveal.minutes} />
                 <TimeCard value={seconds} label={t.reveal.seconds} />
               </div>
+              <RevealWaitingRoom />
             </section>
           </main>
         );

@@ -1,0 +1,121 @@
+.reveal-invitation {
+  padding-top: 40px;
+  padding-bottom: 20px;
+}
+
+.reveal-invitation-card {
+  position: relative;
+  overflow: hidden;
+  padding: 44px;
+  border-radius: 32px;
+  text-align: center;
+  color: white;
+  background:
+    radial-gradient(circle at top left, rgba(255, 95, 162, 0.2), transparent 42%),
+    radial-gradient(circle at bottom right, rgba(155, 77, 255, 0.18), transparent 40%),
+    rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 0 18px 55px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(18px);
+}
+
+.reveal-invitation-eyebrow {
+  margin: 0 0 12px;
+  color: #f7d774;
+  font-size: 0.92rem;
+  font-weight: 900;
+  letter-spacing: 1.8px;
+}
+
+.reveal-invitation-card h2 {
+  margin: 0;
+  font-size: clamp(2rem, 5vw, 3.8rem);
+  line-height: 1.12;
+}
+
+.reveal-invitation-text {
+  width: min(100%, 720px);
+  margin: 18px auto 0;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(1rem, 2vw, 1.2rem);
+  line-height: 1.8;
+}
+
+.reveal-time-box {
+  width: min(100%, 620px);
+  margin: 30px auto 0;
+  padding: 22px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+}
+
+.reveal-time-box span {
+  display: block;
+  margin-bottom: 8px;
+  color: #ffd6f3;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+}
+
+.reveal-time-box strong {
+  display: block;
+  color: white;
+  font-size: clamp(1.1rem, 3vw, 1.6rem);
+  line-height: 1.5;
+}
+
+.reveal-share-actions {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.reveal-share-actions button,
+.reveal-share-actions a {
+  min-width: 190px;
+  padding: 15px 20px;
+  border-radius: 999px;
+  border: none;
+  text-decoration: none;
+  color: white;
+  font-weight: 900;
+  cursor: pointer;
+  background: linear-gradient(135deg, #ff5fa2, #9b4dff);
+  box-shadow: 0 12px 32px rgba(155, 77, 255, 0.28);
+}
+
+.reveal-share-actions button:hover,
+.reveal-share-actions a:hover {
+  transform: translateY(-2px);
+}
+
+.reveal-invitation-note {
+  margin: 22px 0 0;
+  color: #cfcfcf;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 700px) {
+  .reveal-invitation {
+    padding-top: 24px;
+  }
+
+  .reveal-invitation-card {
+    padding: 30px 20px;
+    border-radius: 24px;
+  }
+
+  .reveal-share-actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .reveal-share-actions button,
+  .reveal-share-actions a {
+    width: 100%;
+    min-width: 0;
+  }
+}

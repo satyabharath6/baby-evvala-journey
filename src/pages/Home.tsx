@@ -4,6 +4,7 @@ import LatestJourney from "../components/widgets/LatestJourney";
 import LatestGallery from "../components/widgets/LatestGallery";
 import LatestBlessing from "../components/widgets/LatestBlessing";
 import PredictionStats from "../components/widgets/PredictionStats";
+import RevealInvitation from "../components/widgets/RevealInvitation";
 import CountdownWidget from "../components/widgets/CountdownWidget";
 
 export default function Home() {
@@ -15,6 +16,7 @@ export default function Home() {
       <LatestGallery />
       <LatestBlessing />
       <PredictionStats />
+      <RevealInvitation />
       <CountdownWidget />
     </>
   );
