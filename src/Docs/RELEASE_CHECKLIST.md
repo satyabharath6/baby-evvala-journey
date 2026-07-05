@@ -247,3 +247,44 @@ Before deploy:
 
 ```bash
 npm run build
+---
+
+## 17. Security QA
+
+### Firestore Rules
+
+- [ ] Public users can read homepage letter
+- [ ] Public users can read timeline memories
+- [ ] Public users can read gallery photos metadata
+- [ ] Public users can read blessings
+- [ ] Public users can submit blessings
+- [ ] Public users can read predictions
+- [ ] Public users can submit predictions
+- [ ] Public users can read `settings/revealPublic`
+- [ ] Public users cannot read `settings/reveal`
+- [ ] Public users cannot edit/delete timeline memories
+- [ ] Public users cannot edit/delete gallery photos
+- [ ] Public users cannot edit/delete blessings
+- [ ] Public users cannot edit/delete predictions
+- [ ] Only approved admins can access private reveal settings
+- [ ] Only approved admins can publish reveal result
+
+### Storage Rules
+
+- [ ] Public users can view gallery images
+- [ ] Public users can view timeline images
+- [ ] Public users can view timeline videos
+- [ ] Public users cannot upload files
+- [ ] Public users cannot delete files
+- [ ] Only approved admins can upload images/videos
+- [ ] Only approved admins can replace images/videos
+- [ ] Only approved admins can delete images/videos
+
+### Reveal Secrecy
+
+- [ ] Private gender is stored only in `settings/reveal`
+- [ ] Public reveal page reads only `settings/revealPublic`
+- [ ] Before publishing result, public document has `gender: ""`
+- [ ] After publishing result, public document receives gender
+- [ ] Late visitors still see suspense before final reveal
+- [ ] Hide Result Again removes public gender
